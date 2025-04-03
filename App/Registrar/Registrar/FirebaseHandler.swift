@@ -25,8 +25,6 @@ enum FirebaseHandler {
         static let event = "events"
     }
 
-//    static let ticketKey = "tickets"
-
     static var firestore: Firestore!
     static var currentUser: User? {
         Auth.auth().currentUser
@@ -77,11 +75,14 @@ enum FirebaseHandler {
     private static func initiateFreshSignInWithGoogle() -> Future<Bool, Error> {
         Future { promise in
             guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-                  let rootViewController = windowScene.windows.first?.rootViewController
+                  let rootViewController = windowScene.windows.first?.rootViewController,
+                  let clientID = FirebaseApp.app()?.options.clientID
             else {
                 promise(Result.failure(Failure.unknown))
                 return
             }
+
+            GIDSignIn.sharedInstance.configuration = GIDConfiguration(clientID: clientID)
 
             GIDSignIn.sharedInstance.signIn(withPresenting: rootViewController) { result, error in
                 guard error == nil,

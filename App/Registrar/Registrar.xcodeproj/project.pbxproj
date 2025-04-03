@@ -40,9 +40,22 @@
 		BA4F51022CB996D200DEAF3A /* RegistrarUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RegistrarUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		BA5A72592D9DFDBC001E19F2 /* Exceptions for "Registrar" folder in "Registrar" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = BA4F50E52CB996D100DEAF3A /* Registrar */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		BA4F50E82CB996D100DEAF3A /* Registrar */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				BA5A72592D9DFDBC001E19F2 /* Exceptions for "Registrar" folder in "Registrar" target */,
+			);
 			path = Registrar;
 			sourceTree = "<group>";
 		};
@@ -429,6 +442,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"Registrar/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Registrar/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -457,6 +471,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"Registrar/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Registrar/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

@@ -30,7 +30,10 @@ struct RegistrarApp: App {
 
     var body: some Scene {
         WindowGroup {
-            SignInView()
+            switch Navigation.current {
+            case .signIn: SignInView()
+            case .listEvents: SignInView()
+            }
         }
         .modelContainer(sharedModelContainer)
     }
