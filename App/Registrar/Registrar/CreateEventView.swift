@@ -13,6 +13,7 @@ struct CreateEventView: View {
 
     @State var title: String = ""
     @State var description: String = ""
+    @State var invalid: Bool = false
 
     @State var cancellables = Set<AnyCancellable>()
 
@@ -20,7 +21,9 @@ struct CreateEventView: View {
         VStack {
             HStack{
                 Text("Title: ")
+                    .foregroundStyle(invalid ? .red : .primary)
                 TextField("My Party", text: $title)
+                    .onChange(of: title) { invalid = false }
             }
             HStack{
                 Text("Description: ")
@@ -36,6 +39,10 @@ struct CreateEventView: View {
     }
 
     func createEvent() {
+        guard !title.isEmpty else {
+            invalid = true
+            return
+        }
         Provide.createEvent(
             title: title,
             description: description

@@ -5,18 +5,23 @@
 //  Created by Ezekiel Abuhoff on 10/18/24.
 //
 
+import FirebaseFirestore
+
 struct Event: Codable, Identifiable {
 
-    let id: Int
+    @DocumentID var id: String?
     let creator: String
     let title: String
+    let description: String
     let attending: [String]
 
     struct DatabaseKey {
         private init() {}
 
+        static let id = "id"
         static let creator = "creator"
         static let title = "title"
+        static let description = "description"
         static let attending = "attending"
     }
 
