@@ -1,17 +1,17 @@
 //
-//  CreateEventView.swift
+//  CreateGroupView.swift
 //  Registrar
 //
-//  Created by Ezekiel Abuhoff on 4/7/25.
+//  Created by Ezekiel Abuhoff on 4/8/25.
 //
 
 import SwiftUI
 import Combine
 
-struct CreateEventView: View {
+struct CreateGroupView: View {
     @EnvironmentObject var navigation: Navigation
 
-    @State var title: String = ""
+    @State var name: String = ""
     @State var description: String = ""
     @State var invalid: Bool = false
 
@@ -20,38 +20,38 @@ struct CreateEventView: View {
     var body: some View {
         VStack {
             HStack{
-                Text("Title: ")
+                Text("Name: ")
                     .foregroundStyle(invalid ? .red : .primary)
-                TextField("My Party", text: $title)
-                    .onChange(of: title) { invalid = false }
+                TextField("Scooby Gang", text: $name)
+                    .onChange(of: name) { invalid = false }
             }
             HStack{
                 Text("Description: ")
-                TextField("Cry if I want to", text: $description)
+                TextField("Keeping Sunnydale safe", text: $description)
             }
             Button {
-                createEvent()
+                createGroup()
             } label: {
-                Text("Create Event")
+                Text("Create Group")
             }
         }
     }
 
-    func createEvent() {
-        guard !title.isEmpty else {
+    func createGroup() {
+        guard !name.isEmpty else {
             invalid = true
             return
         }
 
-        Provide.createEvent(
-            title: title,
+        Provide.createGroup(
+            name: name,
             description: description
         ).sink { completion in
             if case let .failure(error) = completion {
-                log("Create Event Failed: \(error)")
+                log("Create Group Failed: \(error)")
             }
-        } receiveValue: { eventCreated in
-            log("Event created: \(eventCreated)", level: .verbose)
+        } receiveValue: { groupCreated in
+            log("Group created: \(groupCreated)", level: .verbose)
             navigation.current = .listEvents
         }.store(in: &cancellables)
     }

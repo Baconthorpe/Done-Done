@@ -12,6 +12,7 @@ class Navigation: ObservableObject {
         case signIn
         case listEvents
         case createEvent
+        case createGroup
     }
 
     @Published var current: State = .signIn

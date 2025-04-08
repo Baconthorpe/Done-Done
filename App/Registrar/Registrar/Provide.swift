@@ -22,11 +22,15 @@ enum Provide {
         FirebaseHandler.signInAnonymously()
     }
 
+    static func createGroup(name: String, description: String) -> Future<Group, Error> {
+        FirebaseHandler.createGroup(Group.Draft(name: name, description: description))
+    }
+
     static func getEvents() -> Future<[Event], Error> {
         FirebaseHandler.getMyEvents()
     }
 
-    static func createEvent(title: String, description: String) -> Future<Bool, Error> {
+    static func createEvent(title: String, description: String) -> Future<Event, Error> {
         FirebaseHandler.createEvent(Event.Draft(title: title, description: description))
     }
 }

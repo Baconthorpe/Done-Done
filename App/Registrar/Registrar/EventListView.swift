@@ -29,6 +29,12 @@ struct EventListView: View {
         } label: {
             Text("Create Event")
         }
+
+        Button {
+            navigation.current = .createGroup
+        } label: {
+            Text("Create Group")
+        }
     }
 
     func getEvents() {

@@ -23,6 +23,7 @@ enum FirebaseHandler {
         private init() {}
         
         static let event = "events"
+        static let group = "groups"
     }
 
     static var firestore: Firestore!
@@ -112,22 +113,59 @@ enum FirebaseHandler {
         }
     }
 
+    // MARK: - Groups
+    static func createGroup(_ draft: Group.Draft) -> Future<Group, Error> {
+        Future { promise in
+            guard let currentUserID = currentUser?.uid else { promise(Result.failure(Failure.signInNeeded)); return }
+            
+            var formattedDraft = draft.asDictionary()
+            formattedDraft[Group.DatabaseKey.members] = [currentUserID]
+            formattedDraft[Group.DatabaseKey.organizers] = [currentUserID]
+
+            let newGroupRef = firestore.collection(DatabaseKey.group).addDocument(data: formattedDraft) { error in
+                if let error = error {
+                    promise(Result.failure(error))
+                    return
+                }
+            }
+
+            let newGroup = Group(
+                id: newGroupRef.documentID,
+                name: draft.name,
+                description: draft.description,
+                members: [currentUserID],
+                organizers: [currentUserID],
+                events: []
+            )
+
+            promise(Result.success(newGroup))
+        }
+    }
+
     // MARK: - Events
-    static func createEvent(_ draft: Event.Draft) -> Future<Bool, Error> {
+    static func createEvent(_ draft: Event.Draft) -> Future<Event, Error> {
         Future { promise in
             guard let currentUserID = currentUser?.uid else { promise(Result.failure(Failure.signInNeeded)); return }
 
             var formattedDraft = draft.asDictionary()
             formattedDraft[Event.DatabaseKey.creator] = currentUserID
 
-            firestore.collection(DatabaseKey.event).document()
-                .setData(formattedDraft) { error in
-                    if let error = error {
-                        promise(Result.failure(error))
-                        return
-                    }
-                    promise(Result.success(true))
+            let newEventRef = firestore.collection(DatabaseKey.event).addDocument(data: formattedDraft) { error in
+                if let error = error {
+                    promise(Result.failure(error))
+                    return
                 }
+            }
+
+            let newEvent = Event(
+                id: newEventRef.documentID,
+                creator: currentUserID,
+                title: draft.title,
+                description: draft.description,
+                attending: []
+            )
+
+            promise(Result.success(newEvent))
         }
     }
 

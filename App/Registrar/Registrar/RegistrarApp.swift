@@ -36,6 +36,7 @@ struct RegistrarApp: App {
             case .signIn: SignInView()
             case .listEvents: EventListView()
             case .createEvent: CreateEventView()
+            case .createGroup: CreateGroupView()
             }
         }
         .environmentObject(navigation)
