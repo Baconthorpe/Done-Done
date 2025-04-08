@@ -34,10 +34,10 @@ struct SignInView: View {
     func signInWithGoogle() {
         Provide.signInWithGoogle().sink { completion in
             if case let .failure(error) = completion {
-                print("Sign In Failed: \(error)")
+                log("Sign In Failed: \(error)")
             }
         } receiveValue: { signedIn in
-            print("Sign In Succeeded")
+            log("Sign In Succeeded", level: .verbose)
             navigation.current = .listEvents
         }.store(in: &cancellables)
     }
@@ -45,10 +45,10 @@ struct SignInView: View {
     func signInAnonymously() {
         Provide.signInAnonymously().sink { completion in
             if case let .failure(error) = completion {
-                print("Sign In Failed: \(error)")
+                log("Sign In Failed: \(error)")
             }
         } receiveValue: { signedIn in
-            print("Sign In Succeeded")
+            log("Sign In Succeeded", level: .verbose)
             navigation.current = .listEvents
         }.store(in: &cancellables)
     }

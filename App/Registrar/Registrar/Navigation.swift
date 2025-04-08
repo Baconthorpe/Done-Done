@@ -16,15 +16,3 @@ class Navigation: ObservableObject {
 
     @Published var current: State = .signIn
 }
-
-//enum Navigation {
-//    case signIn
-//    case listEvents
-//    case createEvent
-//
-//    @Published static var current: Navigation = .signIn
-//}
-
-//func navigate(to destination: Navigation.State) {
-//    Navigation.current = destination
-//}

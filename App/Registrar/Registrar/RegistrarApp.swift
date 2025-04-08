@@ -14,6 +14,7 @@ struct RegistrarApp: App {
 
     init() {
         FirebaseHandler.startUp()
+        Logging.mode = .silent
     }
 
     var sharedModelContainer: ModelContainer = {

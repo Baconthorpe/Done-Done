@@ -30,7 +30,6 @@ struct CreateEventView: View {
                 TextField("Cry if I want to", text: $description)
             }
             Button {
-                print("BURP")
                 createEvent()
             } label: {
                 Text("Create Event")
@@ -43,15 +42,16 @@ struct CreateEventView: View {
             invalid = true
             return
         }
+
         Provide.createEvent(
             title: title,
             description: description
         ).sink { completion in
             if case let .failure(error) = completion {
-                print("Create Event Failed: \(error)")
+                log("Create Event Failed: \(error)")
             }
         } receiveValue: { created in
-            print("Event created")
+            log("Event created", level: .verbose)
             navigation.current = .listEvents
         }.store(in: &cancellables)
     }
