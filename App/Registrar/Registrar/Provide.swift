@@ -27,6 +27,6 @@ enum Provide {
     }
 
     static func createEvent(title: String, description: String) -> Future<Bool, Error> {
-        FirebaseHandler.createEvent(Event.Draft(title: title))
+        FirebaseHandler.createEvent(Event.Draft(title: title, description: description))
     }
 }

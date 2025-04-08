@@ -10,6 +10,7 @@ import SwiftData
 
 @main
 struct RegistrarApp: App {
+    @StateObject var navigation = Navigation()
 
     init() {
         FirebaseHandler.startUp()
@@ -30,11 +31,13 @@ struct RegistrarApp: App {
 
     var body: some Scene {
         WindowGroup {
-            switch Navigation.current {
+            switch navigation.current {
             case .signIn: SignInView()
-            case .listEvents: SignInView()
+            case .listEvents: EventListView()
+            case .createEvent: CreateEventView()
             }
         }
+        .environmentObject(navigation)
         .modelContainer(sharedModelContainer)
     }
 }

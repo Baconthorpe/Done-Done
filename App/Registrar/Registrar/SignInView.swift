@@ -10,6 +10,8 @@ import GoogleSignIn
 import Combine
 
 struct SignInView: View {
+    @EnvironmentObject var navigation: Navigation
+
     @State var email: String = ""
 
     @State var cancellables = Set<AnyCancellable>()
@@ -36,7 +38,7 @@ struct SignInView: View {
             }
         } receiveValue: { signedIn in
             print("Sign In Succeeded")
-            navigate(to: .listEvents)
+            navigation.current = .listEvents
         }.store(in: &cancellables)
     }
 
@@ -47,7 +49,7 @@ struct SignInView: View {
             }
         } receiveValue: { signedIn in
             print("Sign In Succeeded")
-            navigate(to: .listEvents)
+            navigation.current = .listEvents
         }.store(in: &cancellables)
     }
 

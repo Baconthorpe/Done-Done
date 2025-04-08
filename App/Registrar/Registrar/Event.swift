@@ -5,7 +5,7 @@
 //  Created by Ezekiel Abuhoff on 10/18/24.
 //
 
-struct Event: Codable {
+struct Event: Codable, Identifiable {
 
     let id: Int
     let creator: String
@@ -22,9 +22,13 @@ struct Event: Codable {
 
     struct Draft {
         let title: String
+        let description: String
         let attending: [String] = []
+
         func asDictionary() -> [String: Any] {
-            ["attending" : attending]
+            ["title": title,
+             "description": description,
+             "attending" : attending]
         }
     }
 }
