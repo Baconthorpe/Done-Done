@@ -9,17 +9,23 @@ import Foundation
 import Combine
 
 enum Provide {
-    static func signInWithGoogle() -> Future<Bool, Error> {
+    static func signInWithGoogle() -> Future<Profile?, Error> {
         FirebaseHandler.signInWithGoogle()
+            .futureFlatMap(FirebaseHandler.getProfileIfItExists)
+            .onValue { Local.profile = $0 }
     }
 
-    static func signIn(email: String) -> Future<String, Error> {
+    static func signIn(email: String) -> Future<Profile?, Error> {
         FirebaseHandler.signIn(email: email)
-            .onValue { Local.email = $0 }
+            .futureMap { Local.email = $0 }
+            .futureFlatMap(FirebaseHandler.getProfileIfItExists)
+            .onValue { Local.profile = $0 }
     }
 
-    static func signInAnonymously() -> Future<Bool, Error> {
+    static func signInAnonymously() -> Future<Profile?, Error> {
         FirebaseHandler.signInAnonymously()
+            .futureFlatMap(FirebaseHandler.getProfileIfItExists)
+            .onValue { Local.profile = $0 }
     }
 
     static func createGroup(name: String, description: String) -> Future<Group, Error> {

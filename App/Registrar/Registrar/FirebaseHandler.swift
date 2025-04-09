@@ -21,7 +21,8 @@ enum FirebaseHandler {
 
     struct DatabaseKey {
         private init() {}
-        
+
+        static let profile = "profiles"
         static let event = "events"
         static let group = "groups"
     }
@@ -48,7 +49,7 @@ enum FirebaseHandler {
     }
 
     // MARK: - Sign In
-    static func signInWithGoogle() -> Future<Bool, Error> {
+    static func signInWithGoogle() -> Future<Void, Error> {
         if GIDSignIn.sharedInstance.hasPreviousSignIn() {
             return refreshSignInWithGoogle()
         } else {
@@ -56,7 +57,7 @@ enum FirebaseHandler {
         }
     }
 
-    private static func refreshSignInWithGoogle() -> Future<Bool, Error> {
+    private static func refreshSignInWithGoogle() -> Future<Void, Error> {
         Future { promise in
             GIDSignIn.sharedInstance.restorePreviousSignIn { user, error in
                 if let error = error {
@@ -68,12 +69,12 @@ enum FirebaseHandler {
                     return
                 }
 
-                promise(Result.success(true))
+                promise(Result.success(()))
             }
         }
     }
 
-    private static func initiateFreshSignInWithGoogle() -> Future<Bool, Error> {
+    private static func initiateFreshSignInWithGoogle() -> Future<Void, Error> {
         Future { promise in
             guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
                   let rootViewController = windowScene.windows.first?.rootViewController,
@@ -102,14 +103,71 @@ enum FirebaseHandler {
     }
 
     private static func completeSignIn(with credential: AuthCredential,
-                                       promise: @escaping (Result<Bool, Error>) -> Void
+                                       promise: @escaping (Result<Void, Error>) -> Void
     ) {
         Auth.auth().signIn(with: credential) { result, error in
             if let error = error {
                 promise(Result.failure(Failure.firebase(error)))
                 return
             }
-            promise(Result.success(true))
+            promise(Result.success(()))
+        }
+    }
+
+    // MARK: - Profiles
+//    static func storeProfileIfItExists() -> Future<Bool, Error> {
+//        getProfileIfItExists()
+//            .map { if let profileID = $0?.id { Local.profileID = profileID }; return true }
+//    }
+
+    static func getProfileIfItExists() -> Future<Profile?, Error> {
+        Future { promise in
+            guard let currentUserID = currentUser?.uid else { promise(Result.failure(Failure.signInNeeded)); return }
+
+            firestore
+                .collection(DatabaseKey.profile)
+                .whereField(Profile.DatabaseKey.userID, isEqualTo: currentUserID)
+                .getDocuments { querySnapshot, err in
+                    guard let querySnapshot = querySnapshot else {
+                        promise(Result.failure(Failure.unknown))
+                        return
+                    }
+                    let profiles: [Profile] = querySnapshot.documents.compactMap { document in
+                        try? document.data(as: Profile.self)
+                    }
+                    guard let profile = profiles.first else {
+                        promise(Result.success(nil))
+                        return
+                    }
+                    promise(Result.success(profile))
+                }
+        }
+    }
+
+    static func createProfile(_ draft: Profile.Draft) -> Future<Profile, Error> {
+        Future { promise in
+            guard let currentUserID = currentUser?.uid else { promise(Result.failure(Failure.signInNeeded)); return }
+
+            var formattedDraft = draft.asDictionary()
+            formattedDraft[Profile.DatabaseKey.userID] = currentUserID
+
+            let newProfileRef = firestore.collection(DatabaseKey.profile).addDocument(data: formattedDraft) { error in
+                if let error = error {
+                    promise(Result.failure(error))
+                    return
+                }
+            }
+
+            let newProfile = Profile(
+                id:                 newProfileRef.documentID,
+                userID:             currentUserID,
+                name:               draft.name,
+                memberGroups:       draft.memberGroups,
+                organizerGroups:    draft.organizerGroups,
+                attendingEvents:    draft.attendingEvents
+            )
+
+            promise(Result.success(newProfile))
         }
     }
 
@@ -130,12 +188,12 @@ enum FirebaseHandler {
             }
 
             let newGroup = Group(
-                id: newGroupRef.documentID,
-                name: draft.name,
-                description: draft.description,
-                members: [currentUserID],
-                organizers: [currentUserID],
-                events: []
+                id:             newGroupRef.documentID,
+                name:           draft.name,
+                description:    draft.description,
+                members:        [currentUserID],
+                organizers:     [currentUserID],
+                events:         []
             )
 
             promise(Result.success(newGroup))
@@ -158,11 +216,11 @@ enum FirebaseHandler {
             }
 
             let newEvent = Event(
-                id: newEventRef.documentID,
-                creator: currentUserID,
-                title: draft.title,
-                description: draft.description,
-                attending: []
+                id:             newEventRef.documentID,
+                creator:        currentUserID,
+                title:          draft.title,
+                description:    draft.description,
+                attending:      []
             )
 
             promise(Result.success(newEvent))
@@ -272,14 +330,14 @@ enum FirebaseHandler {
         }
     }
 
-    static func signInAnonymously() -> Future<Bool, Error> {
+    static func signInAnonymously() -> Future<Void, Error> {
         Future { promise in
             Auth.auth().signInAnonymously() { authResult, error in
                 if let error = error {
                     promise(Result.failure(error))
                     return
                 }
-                promise(Result.success(currentUser?.isAnonymous ?? true))
+                promise(Result.success(()))
             }
         }
     }

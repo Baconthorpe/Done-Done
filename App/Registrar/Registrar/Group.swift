@@ -32,8 +32,8 @@ struct Group: Codable, Identifiable {
         let description: String
 
         func asDictionary() -> [String: Any] {
-            ["name": name,
-             "description": description]
+            [DatabaseKey.name: name,
+             DatabaseKey.description: description]
         }
     }
 }

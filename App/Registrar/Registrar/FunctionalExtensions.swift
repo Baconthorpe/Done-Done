@@ -27,4 +27,17 @@ extension Future {
     func onValue(perform action: @escaping (Output) -> Void) -> Future<Output, Failure> {
         map { action($0); return $0 }.asFuture()
     }
+
+    func futureMap<O>(_ transform: @escaping (Output) -> O) -> Future<O, Failure> {
+        map(transform).asFuture()
+    }
+
+    func futureFlatMap<P: Publisher>(_ transform: @escaping (Output) -> P) -> Future<P.Output, Failure>
+    where Failure == P.Failure {
+        flatMap(transform).asFuture()
+    }
+
+//    func boop() {
+//        let a = map(
+//    }
 }

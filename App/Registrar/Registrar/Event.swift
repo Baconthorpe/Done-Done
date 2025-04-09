@@ -31,9 +31,9 @@ struct Event: Codable, Identifiable {
         let attending: [String] = []
 
         func asDictionary() -> [String: Any] {
-            ["title": title,
-             "description": description,
-             "attending" : attending]
+            [DatabaseKey.title: title,
+             DatabaseKey.description: description,
+             DatabaseKey.attending : attending]
         }
     }
 }
