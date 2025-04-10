@@ -9,34 +9,40 @@ import Foundation
 import Combine
 
 enum Provide {
-    static func signInWithGoogle() -> Future<Profile?, Error> {
+    static func signInWithGoogle() -> AnyPublisher<Profile?, Error> {
         FirebaseHandler.signInWithGoogle()
-            .futureFlatMap(FirebaseHandler.getProfileIfItExists)
-            .onValue { Local.profile = $0 }
+            .flatMap(FirebaseHandler.getProfile)
+            .sideEffect { Local.profile = $0 }
+            .eraseToAnyPublisher()
     }
 
-    static func signIn(email: String) -> Future<Profile?, Error> {
+    static func signIn(email: String) -> AnyPublisher<Profile?, Error> {
         FirebaseHandler.signIn(email: email)
-            .futureMap { Local.email = $0 }
-            .futureFlatMap(FirebaseHandler.getProfileIfItExists)
-            .onValue { Local.profile = $0 }
+            .map { Local.email = $0 }
+            .flatMap(FirebaseHandler.getProfile)
+            .sideEffect { Local.profile = $0 }
+            .eraseToAnyPublisher()
     }
 
-    static func signInAnonymously() -> Future<Profile?, Error> {
+    static func signInAnonymously() -> AnyPublisher<Profile?, Error> {
         FirebaseHandler.signInAnonymously()
-            .futureFlatMap(FirebaseHandler.getProfileIfItExists)
-            .onValue { Local.profile = $0 }
+            .flatMap(FirebaseHandler.getProfile)
+            .sideEffect { Local.profile = $0 }
+            .eraseToAnyPublisher()
     }
 
-    static func createGroup(name: String, description: String) -> Future<Group, Error> {
+    static func createGroup(name: String, description: String) -> AnyPublisher<Group, Error> {
         FirebaseHandler.createGroup(Group.Draft(name: name, description: description))
+            .eraseToAnyPublisher()
     }
 
-    static func getEvents() -> Future<[Event], Error> {
+    static func getEvents() -> AnyPublisher<[Event], Error> {
         FirebaseHandler.getMyEvents()
+            .eraseToAnyPublisher()
     }
 
-    static func createEvent(title: String, description: String) -> Future<Event, Error> {
+    static func createEvent(title: String, description: String) -> AnyPublisher<Event, Error> {
         FirebaseHandler.createEvent(Event.Draft(title: title, description: description))
+            .eraseToAnyPublisher()
     }
 }

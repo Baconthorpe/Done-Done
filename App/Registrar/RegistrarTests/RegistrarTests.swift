@@ -33,19 +33,6 @@ struct RegistrarTests {
         try await waitFor(condition: { valueReceived == true }, timeout: 20)
     }
 
-//    @Test func oldTestFuture() async throws {
-//        await confirmation { confirm in
-//            let _ = futureThing().sink { error in
-//                #expect(Bool(false))
-//                confirm()
-//            } receiveValue: { value in
-//                #expect(value == 500000500000)
-//                confirm()
-//            }
-//        }
-//        print("oops")
-//    }
-
     @Test func testWait() async throws {
         let start = DispatchTime.now()
 
@@ -54,6 +41,7 @@ struct RegistrarTests {
         }, timeout: 5)
     }
 
+        // MARK: - Test Utilities
     func asyncThing() async throws -> Int {
         let timeout: TimeInterval = 2
         try? await Task.sleep(nanoseconds: UInt64(timeout * 1_000_000_000))

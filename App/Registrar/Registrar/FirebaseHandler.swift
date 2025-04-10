@@ -115,12 +115,7 @@ enum FirebaseHandler {
     }
 
     // MARK: - Profiles
-//    static func storeProfileIfItExists() -> Future<Bool, Error> {
-//        getProfileIfItExists()
-//            .map { if let profileID = $0?.id { Local.profileID = profileID }; return true }
-//    }
-
-    static func getProfileIfItExists() -> Future<Profile?, Error> {
+    static func getProfile() -> Future<Profile?, Error> {
         Future { promise in
             guard let currentUserID = currentUser?.uid else { promise(Result.failure(Failure.signInNeeded)); return }
 
