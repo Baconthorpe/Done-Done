@@ -36,6 +36,11 @@ enum Provide {
             .eraseToAnyPublisher()
     }
 
+    static func sendGroupInvitation(group: String, recipient: String) -> AnyPublisher<GroupInvitation, Error> {
+        FirebaseHandler.sendGroupInvitation(GroupInvitation.Draft(group: group, recipient: recipient))
+            .eraseToAnyPublisher()
+    }
+
     static func getEvents() -> AnyPublisher<[Event], Error> {
         FirebaseHandler.getMyEvents()
             .eraseToAnyPublisher()

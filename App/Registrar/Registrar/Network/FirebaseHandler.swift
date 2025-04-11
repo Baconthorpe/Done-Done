@@ -25,6 +25,7 @@ enum FirebaseHandler {
         static let profile = "profiles"
         static let event = "events"
         static let group = "groups"
+        static let groupInvitation = "groupInvitations"
     }
 
     static var firestore: Firestore!
@@ -195,6 +196,31 @@ enum FirebaseHandler {
         }
     }
 
+    static func sendGroupInvitation(_ draft: GroupInvitation.Draft) -> Future<GroupInvitation, Error> {
+        Future { promise in
+            guard let currentUserID = currentUser?.uid else { promise(Result.failure(Failure.signInNeeded)); return }
+
+            var formattedDraft = draft.asDictionary()
+            formattedDraft[GroupInvitation.DatabaseKey.sender] = currentUserID
+
+            let newGroupInvitationRef = firestore.collection(DatabaseKey.groupInvitation).addDocument(data: formattedDraft) { error in
+                if let error = error {
+                    promise(Result.failure(error))
+                    return
+                }
+            }
+
+            let newGroupInvitation = GroupInvitation(
+                id: newGroupInvitationRef.documentID,
+                group: draft.group,
+                sender: currentUserID,
+                recipient: draft.recipient
+            )
+
+            promise(Result.success(newGroupInvitation))
+        }
+    }
+
     // MARK: - Events
     static func createEvent(_ draft: Event.Draft) -> Future<Event, Error> {
         Future { promise in
@@ -250,68 +276,9 @@ enum FirebaseHandler {
                 let eventRef = firestore.collection(DatabaseKey.event).document(eventID)
 
                 eventRef.updateData([Event.DatabaseKey.attending: FieldValue.arrayUnion([currentUserID])])
-
-//                let result = runTransaction { transaction, errorPointer in
-//                    let eventSnapshot: DocumentSnapshot
-//                    try eventSnapshot = transaction.getDocument(eventRef)
-//
-//                    guard let oldAttending = eventSnapshot.data()?["attending"] as? [String] else {
-//                        let error = NSError(
-//                            domain: "AppErrorDomain",
-//                            code: -1,
-//                            userInfo: [
-//                                NSLocalizedDescriptionKey: "Unable to retrieve population from snapshot \(eventSnapshot)"
-//                            ]
-//                        )
-//                        errorPointer?.pointee = error
-//                        return
-//                    }
-//
-//                    transaction.updateData(["attending": oldAttending + [currentUserID]], forDocument: eventRef)
-//
-//                    guard errorPointer?.pointee == nil else { throw Failure.unknown }
-//                }
             }
         }
     }
-
-//    static func createTicket(_ draft: TicketDraft) -> AnyPublisher<Bool, Error> {
-//        Future { promise in
-//            guard let currentUserID = currentUser?.uid else { promise(Result.failure(Failure.signInNeeded)); return }
-//
-//            var formattedDraft = draft.asDictionary()
-//            formattedDraft["assignee"] = currentUserID
-//
-//            firestore.collection(ticketKey).document()
-//                .setData(formattedDraft) { error in
-//                    if let error = error {
-//                        promise(Result.failure(error))
-//                        return
-//                    }
-//                    promise(Result.success(true))
-//                }
-//        }.eraseToAnyPublisher()
-//    }
-//
-//    static func getTickets() -> AnyPublisher<[Ticket], Error> {
-//        Future { promise in
-//            guard let currentUserID = currentUser?.uid else { promise(Result.failure(Failure.signInNeeded)); return }
-//
-//            firestore
-//                .collection(ticketKey)
-//                .whereField("assignee", isEqualTo: currentUserID)
-//                .getDocuments { querySnapshot, err in
-//                    guard let querySnapshot = querySnapshot else {
-//                        promise(Result.failure(Failure.unknown))
-//                        return
-//                    }
-//                    let tickets: [Ticket] = querySnapshot.documents.compactMap { document in
-//                        try? document.data(as: Ticket.self)
-//                    }
-//                    promise(Result.success(tickets))
-//                }
-//        }.eraseToAnyPublisher()
-//    }
 
     static func signIn(email: String) -> Future<String, Error> {
         Future { promise in
