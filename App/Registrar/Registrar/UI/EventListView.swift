@@ -38,7 +38,7 @@ struct EventListView: View {
     }
 
     func getEvents() {
-        Provide.getEvents().sink { completion in
+        Provide.getMyEvents().sink { completion in
             if case let .failure(error) = completion {
                 log("Get Events Failed: \(error)")
             }

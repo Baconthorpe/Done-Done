@@ -221,6 +221,24 @@ enum FirebaseHandler {
         }
     }
 
+    static func getGroups(groupIDs: [String]) -> Future<[Group], Error> {
+        Future { promise in
+            firestore
+                .collection(DatabaseKey.group)
+                .whereField(Group.DatabaseKey.id, in: groupIDs)
+                .getDocuments { querySnapshot, err in
+                    guard let querySnapshot = querySnapshot else {
+                        promise(Result.failure(Failure.unknown))
+                        return
+                    }
+                    let groups: [Group] = querySnapshot.documents.compactMap { document in
+                        try? document.data(as: Group.self)
+                    }
+                    promise(Result.success(groups))
+                }
+        }
+    }
+
     // MARK: - Events
     static func createEvent(_ draft: Event.Draft) -> Future<Event, Error> {
         Future { promise in
@@ -255,6 +273,24 @@ enum FirebaseHandler {
             firestore
                 .collection(DatabaseKey.event)
                 .whereField(Event.DatabaseKey.creator, isEqualTo: currentUserID)
+                .getDocuments { querySnapshot, err in
+                    guard let querySnapshot = querySnapshot else {
+                        promise(Result.failure(Failure.unknown))
+                        return
+                    }
+                    let events: [Event] = querySnapshot.documents.compactMap { document in
+                        try? document.data(as: Event.self)
+                    }
+                    promise(Result.success(events))
+                }
+        }
+    }
+
+    static func getEvents(eventIDs: [String]) -> Future<[Event], Error> {
+        Future { promise in
+            firestore
+                .collection(DatabaseKey.event)
+                .whereField(Event.DatabaseKey.id, in: eventIDs)
                 .getDocuments { querySnapshot, err in
                     guard let querySnapshot = querySnapshot else {
                         promise(Result.failure(Failure.unknown))

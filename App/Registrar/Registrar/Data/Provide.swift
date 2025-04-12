@@ -41,8 +41,24 @@ enum Provide {
             .eraseToAnyPublisher()
     }
 
-    static func getEvents() -> AnyPublisher<[Event], Error> {
+    static func getGroups() -> AnyPublisher<[Group], Error> {
+        Just(Local.profile?.memberGroups)
+            .map { $0 ?? [] }
+            .flatMap(FirebaseHandler.getGroups)
+            .eraseToAnyPublisher()
+    }
+
+    static func getMyEvents() -> AnyPublisher<[Event], Error> {
         FirebaseHandler.getMyEvents()
+            .eraseToAnyPublisher()
+    }
+
+    static func getEventsForMyGroups() -> AnyPublisher<[Event], Error> {
+        Just(Local.profile?.memberGroups)
+            .map { $0 ?? [] }
+            .flatMap(FirebaseHandler.getGroups)
+            .map { $0.flatMap(\.events) }
+            .flatMap(FirebaseHandler.getEvents)
             .eraseToAnyPublisher()
     }
 
