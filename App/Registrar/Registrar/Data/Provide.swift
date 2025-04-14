@@ -9,6 +9,7 @@ import Foundation
 import Combine
 
 enum Provide {
+    // MARK: - Sign In
     static func signInWithGoogle() -> AnyPublisher<Profile?, Error> {
         FirebaseHandler.signInWithGoogle()
             .flatMap(FirebaseHandler.getProfile)
@@ -31,6 +32,13 @@ enum Provide {
             .eraseToAnyPublisher()
     }
 
+    // MARK: - Profiles
+    static func createProfile(name: String) -> AnyPublisher<Profile, Error> {
+        FirebaseHandler.createProfile(Profile.Draft(name: name))
+            .eraseToAnyPublisher()
+    }
+
+    // MARK: - Groups
     static func createGroup(name: String, description: String) -> AnyPublisher<Group, Error> {
         FirebaseHandler.createGroup(Group.Draft(name: name, description: description))
             .eraseToAnyPublisher()
@@ -48,6 +56,7 @@ enum Provide {
             .eraseToAnyPublisher()
     }
 
+    // MARK: - Events
     static func getMyEvents() -> AnyPublisher<[Event], Error> {
         FirebaseHandler.getMyEvents()
             .eraseToAnyPublisher()

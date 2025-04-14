@@ -25,13 +25,13 @@ struct EventListView: View {
         }.onAppear(perform: getEvents)
 
         Button {
-            navigation.current = .createEvent
+            navigation.location = .createEvent
         } label: {
             Text("Create Event")
         }
 
         Button {
-            navigation.current = .createGroup
+            navigation.location = .createGroup
         } label: {
             Text("Create Group")
         }

@@ -28,15 +28,13 @@ struct Profile: Codable, Identifiable {
     }
 
     struct Draft {
-        let userID: String
         let name: String
         let memberGroups: [String] = []
         let organizerGroups: [String] = []
         let attendingEvents: [String] = []
 
         func asDictionary() -> [String: Any] {
-            [DatabaseKey.userID: userID,
-             DatabaseKey.name: name,
+            [DatabaseKey.name: name,
              DatabaseKey.memberGroups: memberGroups,
              DatabaseKey.organizerGroups: organizerGroups,
              DatabaseKey.attendingEvents: attendingEvents]

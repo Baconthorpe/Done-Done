@@ -52,7 +52,7 @@ struct CreateEventView: View {
             }
         } receiveValue: { eventCreated in
             log("Event created: \(eventCreated)", level: .verbose)
-            navigation.current = .listEvents
+            navigation.flow(.eventCreated)
         }.store(in: &cancellables)
     }
 }

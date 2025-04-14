@@ -52,7 +52,7 @@ struct CreateGroupView: View {
             }
         } receiveValue: { groupCreated in
             log("Group created: \(groupCreated)", level: .verbose)
-            navigation.current = .listEvents
+            navigation.flow(.groupCreated)
         }.store(in: &cancellables)
     }
 }

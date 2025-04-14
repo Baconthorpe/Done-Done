@@ -8,12 +8,31 @@
 import Combine
 
 class Navigation: ObservableObject {
-    enum State {
+    enum Location {
         case signIn
+        case createProfile
         case listEvents
         case createEvent
         case createGroup
     }
 
-    @Published var current: State = .signIn
+    enum Flow {
+        case signedOut
+        case signedIn(profile: Profile?)
+        case profileCreated
+        case groupCreated
+        case eventCreated
+    }
+
+    @Published var location: Location = .signIn
+
+    func flow(_ flow: Flow) {
+        switch flow {
+        case .signedOut:                location = .signIn
+        case let.signedIn(profile):     location = (profile != nil) ? .listEvents : .createProfile
+        case .profileCreated,
+                .groupCreated,
+                .eventCreated:          location = .listEvents
+        }
+    }
 }

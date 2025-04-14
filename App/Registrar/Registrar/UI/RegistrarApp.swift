@@ -32,8 +32,9 @@ struct RegistrarApp: App {
 
     var body: some Scene {
         WindowGroup {
-            switch navigation.current {
+            switch navigation.location {
             case .signIn: SignInView()
+            case .createProfile: CreateProfileView()
             case .listEvents: EventListView()
             case .createEvent: CreateEventView()
             case .createGroup: CreateGroupView()

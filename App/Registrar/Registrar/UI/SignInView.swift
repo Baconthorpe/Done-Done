@@ -20,12 +20,10 @@ struct SignInView: View {
         VStack {
             Text("Sign In")
             GoogleSignInButton().onTapGesture {
-                // Sign In With Google
                 signInWithGoogle()
 
             }
             Button("Skip For Now") {
-                // Sign In Anonymously
                 signInAnonymously()
             }
         }
@@ -36,9 +34,9 @@ struct SignInView: View {
             if case let .failure(error) = completion {
                 log("Sign In Failed: \(error)")
             }
-        } receiveValue: { signedIn in
+        } receiveValue: { profile in
             log("Sign In Succeeded", level: .verbose)
-            navigation.current = .listEvents
+            navigation.flow(.signedIn(profile: profile))
         }.store(in: &cancellables)
     }
 
@@ -47,9 +45,9 @@ struct SignInView: View {
             if case let .failure(error) = completion {
                 log("Sign In Failed: \(error)")
             }
-        } receiveValue: { signedIn in
+        } receiveValue: { profile in
             log("Sign In Succeeded", level: .verbose)
-            navigation.current = .listEvents
+            navigation.flow(.signedIn(profile: profile))
         }.store(in: &cancellables)
     }
 
