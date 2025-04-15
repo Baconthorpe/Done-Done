@@ -16,24 +16,28 @@ struct EventListView: View {
     @State var cancellables = Set<AnyCancellable>()
 
     var body: some View {
-        Text("EVENTS")
+        NavigationView {
+            Text("EVENTS")
 
-        List {
-            ForEach(events) { event in
-                Text(event.title)
+            List {
+                ForEach(events) { event in
+                    NavigationLink(destination: EventDetailsView(event: event)) {
+                        Text(event.title)
+                    }
+                }
+            }.onAppear(perform: getEvents)
+
+            Button {
+                navigation.location = .createEvent
+            } label: {
+                Text("Create Event")
             }
-        }.onAppear(perform: getEvents)
 
-        Button {
-            navigation.location = .createEvent
-        } label: {
-            Text("Create Event")
-        }
-
-        Button {
-            navigation.location = .createGroup
-        } label: {
-            Text("Create Group")
+            Button {
+                navigation.location = .createGroup
+            } label: {
+                Text("Create Group")
+            }
         }
     }
 

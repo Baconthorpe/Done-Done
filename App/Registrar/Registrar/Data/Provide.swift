@@ -75,4 +75,9 @@ enum Provide {
         FirebaseHandler.createEvent(Event.Draft(title: title, description: description))
             .eraseToAnyPublisher()
     }
+
+    static func getProfilesOfAttending(userIDs: [String]) -> AnyPublisher<[Profile], Error> {
+        FirebaseHandler.getProfilesOfAttending(userIDs: userIDs)
+            .eraseToAnyPublisher()
+    }
 }

@@ -115,6 +115,30 @@ enum FirebaseHandler {
         }
     }
 
+    static func signIn(email: String) -> Future<String, Error> {
+        Future { promise in
+            Auth.auth().sendSignInLink(toEmail: email, actionCodeSettings: actionCodeSettings) { error in
+                if let error = error {
+                    promise(Result.failure(error))
+                    return
+                }
+                promise(Result.success(email))
+            }
+        }
+    }
+
+    static func signInAnonymously() -> Future<Void, Error> {
+        Future { promise in
+            Auth.auth().signInAnonymously() { authResult, error in
+                if let error = error {
+                    promise(Result.failure(error))
+                    return
+                }
+                promise(Result.success(()))
+            }
+        }
+    }
+
     // MARK: - Profiles
     static func getProfile() -> Future<Profile?, Error> {
         Future { promise in
@@ -316,27 +340,26 @@ enum FirebaseHandler {
         }
     }
 
-    static func signIn(email: String) -> Future<String, Error> {
+    static func getProfilesOfAttending(userIDs: [String]) -> Future<[Profile], Error> {
         Future { promise in
-            Auth.auth().sendSignInLink(toEmail: email, actionCodeSettings: actionCodeSettings) { error in
-                if let error = error {
-                    promise(Result.failure(error))
-                    return
-                }
-                promise(Result.success(email))
+            guard !userIDs.isEmpty else {
+                promise(Result.success([]))
+                return
             }
-        }
-    }
 
-    static func signInAnonymously() -> Future<Void, Error> {
-        Future { promise in
-            Auth.auth().signInAnonymously() { authResult, error in
-                if let error = error {
-                    promise(Result.failure(error))
-                    return
+            firestore
+                .collection(DatabaseKey.profile)
+                .whereField(Profile.DatabaseKey.userID, in: userIDs)
+                .getDocuments { querySnapshot, err in
+                    guard let querySnapshot = querySnapshot else {
+                        promise(Result.failure(Failure.unknown))
+                        return
+                    }
+                    let profiles: [Profile] = querySnapshot.documents.compactMap { document in
+                        try? document.data(as: Profile.self)
+                    }
+                    promise(Result.success(profiles))
                 }
-                promise(Result.success(()))
-            }
         }
     }
 }

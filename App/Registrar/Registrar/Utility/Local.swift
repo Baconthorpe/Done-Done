@@ -32,7 +32,6 @@ enum Local {
         }
 
         set {
-            UserDefaults.standard.set(newValue, forKey: profileKey)
             if let encodedProfile = try? JSONEncoder().encode(newValue) {
                 UserDefaults.standard.set(encodedProfile, forKey: profileKey)
             }
