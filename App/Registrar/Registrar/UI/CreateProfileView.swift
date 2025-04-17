@@ -9,7 +9,7 @@ import SwiftUI
 import Combine
 
 struct CreateProfileView: View {
-    @EnvironmentObject var navigation: Navigation
+    @EnvironmentObject var flow: Flow
 
     @State private var name: String = ""
     @State var invalid: Bool = false
@@ -47,7 +47,7 @@ struct CreateProfileView: View {
             }
         } receiveValue: { newProfile in
             log("Created Profile: \(newProfile)", level: .verbose)
-            navigation.location = .signedIn(withProfile: true)
+            flow.location = .signedIn(withProfile: true)
         }.store(in: &cancellables)
     }
 }

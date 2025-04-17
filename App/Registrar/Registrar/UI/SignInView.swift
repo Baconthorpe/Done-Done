@@ -10,7 +10,7 @@ import GoogleSignIn
 import Combine
 
 struct SignInView: View {
-    @EnvironmentObject var navigation: Navigation
+    @EnvironmentObject var flow: Flow
 
     @State var email: String = ""
 
@@ -36,7 +36,7 @@ struct SignInView: View {
             }
         } receiveValue: { profile in
             log("Sign In Succeeded", level: .verbose)
-            navigation.location = .signedIn(withProfile: profile != nil)
+            flow.location = .signedIn(withProfile: profile != nil)
         }.store(in: &cancellables)
     }
 
@@ -47,7 +47,7 @@ struct SignInView: View {
             }
         } receiveValue: { profile in
             log("Sign In Succeeded", level: .verbose)
-            navigation.location = .signedIn(withProfile: profile != nil)
+            flow.location = .signedIn(withProfile: profile != nil)
         }.store(in: &cancellables)
     }
 

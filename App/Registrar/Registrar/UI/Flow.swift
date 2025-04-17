@@ -7,13 +7,13 @@
 
 import Combine
 
-class Navigation: ObservableObject {
+class Flow: ObservableObject {
     enum Location {
         case signedOut
         case signedIn(withProfile: Bool)
     }
 
-    enum Flow {
+    enum Go {
         case creatingEvent
         case creatingGroup
     }

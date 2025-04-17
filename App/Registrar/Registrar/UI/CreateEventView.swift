@@ -9,7 +9,6 @@ import SwiftUI
 import Combine
 
 struct CreateEventView: View {
-    @EnvironmentObject var navigation: Navigation
     @Binding var path: NavigationPath
 
     @State var title: String = ""

@@ -9,7 +9,6 @@ import SwiftUI
 import Combine
 
 struct CreateGroupView: View {
-    @EnvironmentObject var navigation: Navigation
     @Binding var path: NavigationPath
 
     @State var name: String = ""

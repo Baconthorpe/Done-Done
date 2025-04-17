@@ -10,7 +10,7 @@ import SwiftData
 
 @main
 struct RegistrarApp: App {
-    @StateObject var navigation = Navigation()
+    @StateObject var flow = Flow()
 
     init() {
         FirebaseHandler.startUp()
@@ -32,12 +32,12 @@ struct RegistrarApp: App {
 
     var body: some Scene {
         WindowGroup {
-            switch navigation.location {
+            switch flow.location {
             case .signedOut: SignInView()
             case let .signedIn(withProfile): withProfile ? AnyView(EventListView()) : AnyView(CreateProfileView())
             }
         }
-        .environmentObject(navigation)
+        .environmentObject(flow)
         .modelContainer(sharedModelContainer)
     }
 }

@@ -9,8 +9,6 @@ import SwiftUI
 import Combine
 
 struct EventDetailsView: View {
-    @EnvironmentObject var navigation: Navigation
-
     let event: Event
     @State var attendingProfiles: [Profile] = []
 

@@ -9,8 +9,6 @@ import SwiftUI
 import Combine
 
 struct EventListView: View {
-    @EnvironmentObject var navigation: Navigation
-
     @State var events: [Event] = []
 
     @State var cancellables = Set<AnyCancellable>()
@@ -30,11 +28,11 @@ struct EventListView: View {
                         EventDetailsView(event: event)
                     }
 
-                NavigationLink("Create Event", value: Navigation.Flow.creatingEvent)
+                NavigationLink("Create Event", value: Flow.Go.creatingEvent)
 
-                NavigationLink("Create Group", value: Navigation.Flow.creatingGroup)
+                NavigationLink("Create Group", value: Flow.Go.creatingGroup)
             }
-            .navigationDestination(for: Navigation.Flow.self) { flow in
+            .navigationDestination(for: Flow.Go.self) { flow in
                 if flow == .creatingEvent { CreateEventView(path: $path) }
                 if flow == .creatingGroup { CreateGroupView(path: $path) }
             }
