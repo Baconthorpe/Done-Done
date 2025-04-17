@@ -7,7 +7,7 @@
 
 import FirebaseFirestore
 
-struct Event: Codable, Identifiable {
+struct Event: Codable, Identifiable, Hashable {
 
     @DocumentID var id: String?
     let creator: String

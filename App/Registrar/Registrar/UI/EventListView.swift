@@ -14,29 +14,32 @@ struct EventListView: View {
     @State var events: [Event] = []
 
     @State var cancellables = Set<AnyCancellable>()
+    @State var path = NavigationPath()
 
     var body: some View {
-        NavigationView {
-            Text("EVENTS")
-
-            List {
-                ForEach(events) { event in
-                    NavigationLink(destination: EventDetailsView(event: event)) {
-                        Text(event.title)
+        NavigationStack(path: $path) {
+            VStack {
+                Text("EVENTS")
+                
+                List {
+                    ForEach(events) { event in
+                        NavigationLink(value: event) { Text(event.title) }
                     }
+                }.onAppear(perform: getEvents)
+                    .navigationDestination(for: Event.self) { event in
+                        EventDetailsView(event: event)
+                    }
+
+                NavigationLink("Create Event", value: true)
+                    .navigationDestination(for: Bool.self) { _ in
+                        CreateEventView(path: $path)
+                    }
+                
+                Button {
+                    navigation.location = .createGroup
+                } label: {
+                    Text("Create Group")
                 }
-            }.onAppear(perform: getEvents)
-
-            Button {
-                navigation.location = .createEvent
-            } label: {
-                Text("Create Event")
-            }
-
-            Button {
-                navigation.location = .createGroup
-            } label: {
-                Text("Create Group")
             }
         }
     }

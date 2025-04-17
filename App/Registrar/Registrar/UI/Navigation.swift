@@ -12,7 +12,6 @@ class Navigation: ObservableObject {
         case signIn
         case createProfile
         case listEvents
-        case createEvent
         case createGroup
     }
 

@@ -17,16 +17,17 @@ struct EventDetailsView: View {
     @State var cancellables = Set<AnyCancellable>()
 
     var body: some View {
-        Text(event.title)
-        Text(event.description)
-
-        Text("Attending")
-            .onAppear(perform: getAttending)
         VStack {
-            ForEach(attendingProfiles) { profile in
-                Text(profile.name)
+            Text(event.description)
+            
+            Text("Attending")
+                .onAppear(perform: getAttending)
+            List {
+                ForEach(attendingProfiles) { profile in
+                    Text(profile.name)
+                }
             }
-        }
+        }.navigationTitle(event.title)
     }
 
     func getAttending() {

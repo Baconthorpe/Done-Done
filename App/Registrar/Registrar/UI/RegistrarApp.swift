@@ -36,7 +36,6 @@ struct RegistrarApp: App {
             case .signIn: SignInView()
             case .createProfile: CreateProfileView()
             case .listEvents: EventListView()
-            case .createEvent: CreateEventView()
             case .createGroup: CreateGroupView()
             }
         }

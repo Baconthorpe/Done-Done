@@ -10,6 +10,7 @@ import Combine
 
 struct CreateEventView: View {
     @EnvironmentObject var navigation: Navigation
+    @Binding var path: NavigationPath
 
     @State var title: String = ""
     @State var description: String = ""
@@ -52,7 +53,7 @@ struct CreateEventView: View {
             }
         } receiveValue: { eventCreated in
             log("Event created: \(eventCreated)", level: .verbose)
-            navigation.flow(.eventCreated)
+            path.removeLast()
         }.store(in: &cancellables)
     }
 }
