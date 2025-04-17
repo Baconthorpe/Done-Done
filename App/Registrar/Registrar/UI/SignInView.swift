@@ -36,7 +36,7 @@ struct SignInView: View {
             }
         } receiveValue: { profile in
             log("Sign In Succeeded", level: .verbose)
-            navigation.flow(.signedIn(profile: profile))
+            navigation.location = .signedIn(withProfile: profile != nil)
         }.store(in: &cancellables)
     }
 
@@ -47,7 +47,7 @@ struct SignInView: View {
             }
         } receiveValue: { profile in
             log("Sign In Succeeded", level: .verbose)
-            navigation.flow(.signedIn(profile: profile))
+            navigation.location = .signedIn(withProfile: profile != nil)
         }.store(in: &cancellables)
     }
 

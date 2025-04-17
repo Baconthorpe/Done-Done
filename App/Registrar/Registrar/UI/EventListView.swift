@@ -30,16 +30,13 @@ struct EventListView: View {
                         EventDetailsView(event: event)
                     }
 
-                NavigationLink("Create Event", value: true)
-                    .navigationDestination(for: Bool.self) { _ in
-                        CreateEventView(path: $path)
-                    }
-                
-                Button {
-                    navigation.location = .createGroup
-                } label: {
-                    Text("Create Group")
-                }
+                NavigationLink("Create Event", value: Navigation.Flow.creatingEvent)
+
+                NavigationLink("Create Group", value: Navigation.Flow.creatingGroup)
+            }
+            .navigationDestination(for: Navigation.Flow.self) { flow in
+                if flow == .creatingEvent { CreateEventView(path: $path) }
+                if flow == .creatingGroup { CreateGroupView(path: $path) }
             }
         }
     }

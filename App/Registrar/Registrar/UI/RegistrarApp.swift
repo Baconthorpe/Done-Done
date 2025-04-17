@@ -33,10 +33,8 @@ struct RegistrarApp: App {
     var body: some Scene {
         WindowGroup {
             switch navigation.location {
-            case .signIn: SignInView()
-            case .createProfile: CreateProfileView()
-            case .listEvents: EventListView()
-            case .createGroup: CreateGroupView()
+            case .signedOut: SignInView()
+            case let .signedIn(withProfile): withProfile ? AnyView(EventListView()) : AnyView(CreateProfileView())
             }
         }
         .environmentObject(navigation)

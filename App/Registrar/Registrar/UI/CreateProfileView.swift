@@ -47,7 +47,7 @@ struct CreateProfileView: View {
             }
         } receiveValue: { newProfile in
             log("Created Profile: \(newProfile)", level: .verbose)
-            navigation.flow(.profileCreated)
+            navigation.location = .signedIn(withProfile: true)
         }.store(in: &cancellables)
     }
 }

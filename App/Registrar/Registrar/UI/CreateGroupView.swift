@@ -10,6 +10,7 @@ import Combine
 
 struct CreateGroupView: View {
     @EnvironmentObject var navigation: Navigation
+    @Binding var path: NavigationPath
 
     @State var name: String = ""
     @State var description: String = ""
@@ -52,7 +53,7 @@ struct CreateGroupView: View {
             }
         } receiveValue: { groupCreated in
             log("Group created: \(groupCreated)", level: .verbose)
-            navigation.flow(.groupCreated)
+            path.removeLast()
         }.store(in: &cancellables)
     }
 }
