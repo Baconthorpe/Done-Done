@@ -16,6 +16,7 @@ enum FirebaseHandler {
     enum Failure: Error {
         case unknown
         case signInNeeded
+        case actionNotAllowed
         case firebase(Error)
     }
 
@@ -242,6 +243,44 @@ enum FirebaseHandler {
             )
 
             promise(Result.success(newGroupInvitation))
+        }
+    }
+
+    static func getMyGroupInvitations() -> Future<[GroupInvitation], Error> {
+        Future { promise in
+            guard let currentUserID = currentUser?.uid else { promise(Result.failure(Failure.signInNeeded)); return }
+
+            firestore
+                .collection(DatabaseKey.groupInvitation)
+                .whereField(GroupInvitation.DatabaseKey.recipient, isEqualTo: currentUserID)
+                .getDocuments { querySnapshot, err in
+                    guard let querySnapshot = querySnapshot else {
+                        promise(Result.failure(Failure.unknown))
+                        return
+                    }
+                    let groupInvitations: [GroupInvitation] = querySnapshot.documents.compactMap { document in
+                        try? document.data(as: GroupInvitation.self)
+                    }
+                    promise(Result.success(groupInvitations))
+                }
+        }
+    }
+
+    static func acceptGroupInvitation(_ invitation: GroupInvitation) -> Future<Void, Error> {
+        Future { promise in
+            guard let currentUserID = currentUser?.uid else { promise(Result.failure(Failure.signInNeeded)); return }
+            guard invitation.recipient == currentUserID else { promise(Result.failure(Failure.actionNotAllowed)); return }
+
+            let groupRef = firestore.collection(DatabaseKey.group).document(invitation.group)
+
+            Task {
+                do {
+                    try await groupRef.updateData([Group.DatabaseKey.members: FieldValue.arrayUnion([currentUserID])])
+                    promise(Result.success(()))
+                } catch {
+                    promise(Result.failure(Failure.firebase(error)))
+                }
+            }
         }
     }
 

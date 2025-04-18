@@ -49,6 +49,16 @@ enum Provide {
             .eraseToAnyPublisher()
     }
 
+    static func getMyGroupInvitations() -> AnyPublisher<[GroupInvitation], Error> {
+        FirebaseHandler.getMyGroupInvitations()
+            .eraseToAnyPublisher()
+    }
+
+    static func acceptGroupInvitation(_ invitation: GroupInvitation) -> AnyPublisher<Void, Error> {
+        FirebaseHandler.acceptGroupInvitation(invitation)
+            .eraseToAnyPublisher()
+    }
+
     static func getGroups() -> AnyPublisher<[Group], Error> {
         Just(Local.profile?.memberGroups)
             .map { $0 ?? [] }
