@@ -116,14 +116,30 @@ enum FirebaseHandler {
         }
     }
 
-    static func signIn(email: String) -> Future<String, Error> {
+    static func createUser(email: String, password: String) -> Future<Void, Error> {
         Future { promise in
-            Auth.auth().sendSignInLink(toEmail: email, actionCodeSettings: actionCodeSettings) { error in
+            Auth.auth().createUser(withEmail: email, password: password) { authResult, error in
+                if let error = error {
+                    promise(Result.failure(Failure.firebase(error)))
+                    return
+                }
+                promise(Result.success(()))
+            }
+        }
+    }
+
+    static func signIn(email: String, password: String) -> Future<Void, Error> {
+        Future { promise in
+            Auth.auth().signIn(withEmail: email, password: password) { authResult, error in
                 if let error = error {
                     promise(Result.failure(error))
                     return
                 }
-                promise(Result.success(email))
+                guard let _ = authResult?.user.uid else {
+                    promise(Result.failure(Failure.unknown))
+                    return
+                }
+                promise(Result.success(()))
             }
         }
     }

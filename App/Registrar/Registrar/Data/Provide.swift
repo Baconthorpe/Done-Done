@@ -17,9 +17,14 @@ enum Provide {
             .eraseToAnyPublisher()
     }
 
-    static func signIn(email: String) -> AnyPublisher<Profile?, Error> {
-        FirebaseHandler.signIn(email: email)
-            .map { Local.email = $0 }
+    static func signUp(email: String, password: String) -> AnyPublisher<Profile?, Error> {
+        FirebaseHandler.createUser(email: email, password: password)
+            .map { nil }
+            .eraseToAnyPublisher()
+    }
+
+    static func signIn(email: String, password: String) -> AnyPublisher<Profile?, Error> {
+        FirebaseHandler.signIn(email: email, password: password)
             .flatMap(FirebaseHandler.getProfile)
             .sideEffect { Local.profile = $0 }
             .eraseToAnyPublisher()
