@@ -43,6 +43,11 @@ enum Provide {
             .eraseToAnyPublisher()
     }
 
+    static func searchForProfiles(name: String) -> AnyPublisher<[Profile], Error> {
+        FirebaseHandler.getProfilesByName(name)
+            .eraseToAnyPublisher()
+    }
+
     // MARK: - Groups
     static func createGroup(name: String, description: String) -> AnyPublisher<Group, Error> {
         FirebaseHandler.createGroup(Group.Draft(name: name, description: description))
@@ -68,6 +73,16 @@ enum Provide {
         Just(Local.profile?.memberGroups)
             .map { $0 ?? [] }
             .flatMap(FirebaseHandler.getGroups)
+            .eraseToAnyPublisher()
+    }
+
+    static func getGroupOrganizers(_ group: Group) -> AnyPublisher<[Profile], Error> {
+        FirebaseHandler.getGroupOrganizers(group)
+            .eraseToAnyPublisher()
+    }
+
+    static func getGroupMembers(_ group: Group) -> AnyPublisher<[Profile], Error> {
+        FirebaseHandler.getGroupMembers(group)
             .eraseToAnyPublisher()
     }
 

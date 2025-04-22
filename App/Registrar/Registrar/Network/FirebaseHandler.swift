@@ -208,6 +208,23 @@ enum FirebaseHandler {
         }
     }
 
+    static func getProfilesByName(_ name: String) -> Future<[Profile], Error> {
+        Future { promise in
+            firestore.collection(DatabaseKey.profile)
+                .whereField(Profile.DatabaseKey.name, isEqualTo: name)
+                .getDocuments { querySnapshot, err in
+                    guard let querySnapshot = querySnapshot else {
+                        promise(Result.failure(Failure.unknown))
+                        return
+                    }
+                    let profiles: [Profile] = querySnapshot.documents.compactMap { document in
+                        try? document.data(as: Profile.self)
+                    }
+                    promise(Result.success(profiles))
+                }
+        }
+    }
+
     // MARK: - Groups
     static func createGroup(_ draft: Group.Draft) -> Future<Group, Error> {
         Future { promise in
@@ -314,6 +331,42 @@ enum FirebaseHandler {
                         try? document.data(as: Group.self)
                     }
                     promise(Result.success(groups))
+                }
+        }
+    }
+
+    static func getGroupOrganizers(_ group: Group) -> Future<[Profile], Error> {
+        Future { promise in
+            firestore
+                .collection(DatabaseKey.profile)
+                .whereField(Profile.DatabaseKey.userID, in: group.organizers)
+                .getDocuments { querySnapshot, err in
+                    guard let querySnapshot = querySnapshot else {
+                        promise(Result.failure(Failure.unknown))
+                        return
+                    }
+                    let profiles: [Profile] = querySnapshot.documents.compactMap { document in
+                        try? document.data(as: Profile.self)
+                    }
+                    promise(Result.success(profiles))
+                }
+        }
+    }
+
+    static func getGroupMembers(_ group: Group) -> Future<[Profile], Error> {
+        Future { promise in
+            firestore
+                .collection(DatabaseKey.profile)
+                .whereField(Profile.DatabaseKey.userID, in: group.members)
+                .getDocuments { querySnapshot, err in
+                    guard let querySnapshot = querySnapshot else {
+                        promise(Result.failure(Failure.unknown))
+                        return
+                    }
+                    let profiles: [Profile] = querySnapshot.documents.compactMap { document in
+                        try? document.data(as: Profile.self)
+                    }
+                    promise(Result.success(profiles))
                 }
         }
     }
