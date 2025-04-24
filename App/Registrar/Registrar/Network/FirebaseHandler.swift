@@ -188,23 +188,22 @@ enum FirebaseHandler {
             var formattedDraft = draft.asDictionary()
             formattedDraft[Profile.DatabaseKey.userID] = currentUserID
 
-            let newProfileRef = firestore.collection(DatabaseKey.profile).addDocument(data: formattedDraft) { error in
+            firestore.collection(DatabaseKey.profile).document(currentUserID).setData(formattedDraft) { error in
                 if let error = error {
                     promise(Result.failure(error))
                     return
                 }
+
+                let newProfile = Profile(
+                    userID:             currentUserID,
+                    name:               draft.name,
+                    memberGroups:       draft.memberGroups,
+                    organizerGroups:    draft.organizerGroups,
+                    attendingEvents:    draft.attendingEvents
+                )
+
+                promise(Result.success(newProfile))
             }
-
-            let newProfile = Profile(
-                id:                 newProfileRef.documentID,
-                userID:             currentUserID,
-                name:               draft.name,
-                memberGroups:       draft.memberGroups,
-                organizerGroups:    draft.organizerGroups,
-                attendingEvents:    draft.attendingEvents
-            )
-
-            promise(Result.success(newProfile))
         }
     }
 
@@ -226,31 +225,49 @@ enum FirebaseHandler {
     }
 
     // MARK: - Groups
-    static func createGroup(_ draft: Group.Draft) -> Future<Group, Error> {
+    static func createGroup(_ draft: Group.Draft, profile: Profile) -> Future<Group, Error> {
         Future { promise in
             guard let currentUserID = currentUser?.uid else { promise(Result.failure(Failure.signInNeeded)); return }
-            
-            var formattedDraft = draft.asDictionary()
-            formattedDraft[Group.DatabaseKey.members] = [currentUserID]
-            formattedDraft[Group.DatabaseKey.organizers] = [currentUserID]
 
-            let newGroupRef = firestore.collection(DatabaseKey.group).addDocument(data: formattedDraft) { error in
-                if let error = error {
-                    promise(Result.failure(error))
+            firestore.runTransaction { transaction, errorPointer in
+                var formattedDraft = draft.asDictionary()
+                formattedDraft[Group.DatabaseKey.members] = [currentUserID]
+                formattedDraft[Group.DatabaseKey.organizers] = [currentUserID]
+
+                let newGroupRef = firestore.collection(DatabaseKey.group).document()
+
+                let profile = firestore
+                    .collection(DatabaseKey.profile)
+                    .document(currentUserID)
+
+                transaction.setData(formattedDraft, forDocument: newGroupRef)
+                transaction.updateData([
+                    Profile.DatabaseKey.memberGroups: FieldValue.arrayUnion([newGroupRef.documentID]),
+                    Profile.DatabaseKey.organizerGroups: FieldValue.arrayUnion([newGroupRef.documentID])
+                ], forDocument: profile)
+
+                let newGroup = Group(
+                    id:             newGroupRef.documentID,
+                    name:           draft.name,
+                    description:    draft.description,
+                    members:        [currentUserID],
+                    organizers:     [currentUserID],
+                    events:         []
+                )
+                return newGroup
+
+            } completion: { newGroup, error in
+                guard let newGroup = newGroup as? Group else {
+                    promise(.failure(Failure.unknown))
                     return
                 }
+                if let error = error {
+                    promise(.failure(Failure.firebase(error)))
+                    return
+                }
+
+                promise(.success(newGroup))
             }
-
-            let newGroup = Group(
-                id:             newGroupRef.documentID,
-                name:           draft.name,
-                description:    draft.description,
-                members:        [currentUserID],
-                organizers:     [currentUserID],
-                events:         []
-            )
-
-            promise(Result.success(newGroup))
         }
     }
 
@@ -319,9 +336,14 @@ enum FirebaseHandler {
 
     static func getGroups(groupIDs: [String]) -> Future<[Group], Error> {
         Future { promise in
+            guard !groupIDs.isEmpty else {
+                promise(Result.success([]))
+                return
+            }
+
             firestore
                 .collection(DatabaseKey.group)
-                .whereField(Group.DatabaseKey.id, in: groupIDs)
+                .whereField(FieldPath.documentID(), in: groupIDs)
                 .getDocuments { querySnapshot, err in
                     guard let querySnapshot = querySnapshot else {
                         promise(Result.failure(Failure.unknown))
@@ -422,7 +444,7 @@ enum FirebaseHandler {
         Future { promise in
             firestore
                 .collection(DatabaseKey.event)
-                .whereField(Event.DatabaseKey.id, in: eventIDs)
+                .whereField(FieldPath.documentID(), in: eventIDs)
                 .getDocuments { querySnapshot, err in
                     guard let querySnapshot = querySnapshot else {
                         promise(Result.failure(Failure.unknown))

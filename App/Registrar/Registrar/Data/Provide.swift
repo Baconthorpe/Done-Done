@@ -9,6 +9,10 @@ import Foundation
 import Combine
 
 enum Provide {
+    enum Failure: Error {
+        case actionRequiresProfile
+    }
+
     // MARK: - Sign In
     static func signInWithGoogle() -> AnyPublisher<Profile?, Error> {
         FirebaseHandler.signInWithGoogle()
@@ -40,6 +44,9 @@ enum Provide {
     // MARK: - Profiles
     static func createProfile(name: String) -> AnyPublisher<Profile, Error> {
         FirebaseHandler.createProfile(Profile.Draft(name: name))
+            .sideEffect {
+                Local.profile = $0
+            }
             .eraseToAnyPublisher()
     }
 
@@ -50,7 +57,23 @@ enum Provide {
 
     // MARK: - Groups
     static func createGroup(name: String, description: String) -> AnyPublisher<Group, Error> {
-        FirebaseHandler.createGroup(Group.Draft(name: name, description: description))
+        Just(Local.profile)
+            .tryMap {
+                guard let profile = $0 else { throw Failure.actionRequiresProfile }
+                return (Group.Draft(name: name, description: description), profile)
+            }
+            .flatMap(FirebaseHandler.createGroup)
+            .sideEffect({ group in
+                guard let profile = Local.profile else { return }
+                let updatedProfile = Profile(
+                    userID: profile.userID,
+                    name: profile.name,
+                    memberGroups: profile.memberGroups + [group.id ?? ""],
+                    organizerGroups: profile.organizerGroups + [group.id ?? ""],
+                    attendingEvents: profile.attendingEvents
+                )
+                Local.profile = updatedProfile
+            })
             .eraseToAnyPublisher()
     }
 

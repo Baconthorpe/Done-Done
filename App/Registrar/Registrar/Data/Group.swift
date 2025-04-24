@@ -7,7 +7,7 @@
 
 import FirebaseFirestore
 
-struct Group: Codable, Identifiable {
+struct Group: Codable, Identifiable, Hashable {
 
     @DocumentID var id: String?
     let name: String
@@ -33,7 +33,8 @@ struct Group: Codable, Identifiable {
 
         func asDictionary() -> [String: Any] {
             [DatabaseKey.name: name,
-             DatabaseKey.description: description]
+             DatabaseKey.description: description,
+             DatabaseKey.events: []]
         }
     }
 }

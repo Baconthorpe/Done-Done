@@ -34,7 +34,7 @@ struct RegistrarApp: App {
         WindowGroup {
             switch flow.location {
             case .signedOut: SignInView()
-            case let .signedIn(withProfile): withProfile ? AnyView(EventListView()) : AnyView(CreateProfileView())
+            case let .signedIn(withProfile): withProfile ? AnyView(MainSignedInView()) : AnyView(CreateProfileView())
             }
         }
         .environmentObject(flow)

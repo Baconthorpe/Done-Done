@@ -9,7 +9,7 @@ import FirebaseFirestore
 
 struct Profile: Codable, Identifiable {
 
-    @DocumentID var id: String?
+    var id: String { userID }
     let userID: String
     let name: String
     let memberGroups: [String]
@@ -43,7 +43,6 @@ struct Profile: Codable, Identifiable {
 
     static func from(dictionary: [String: Any]) -> Self? {
         Self(
-            id: dictionary[DatabaseKey.id] as? String ?? "",
             userID: dictionary[DatabaseKey.userID] as? String ?? "",
             name: dictionary[DatabaseKey.name] as? String ?? "",
             memberGroups: dictionary[DatabaseKey.memberGroups] as? [String] ?? [],

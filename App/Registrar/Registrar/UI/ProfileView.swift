@@ -15,17 +15,26 @@ struct ProfileView: View {
     @State var groups: [Group] = []
 
     @State var cancellables = Set<AnyCancellable>()
+    @State var path = NavigationPath()
 
     var body: some View {
-        Text(profile?.name ?? "")
+        NavigationStack(path: $path) {
 
-        Text("Groups")
-        List {
-            ForEach(groups) { group in
-                Text(group.name)
+            Text(profile?.name ?? "PROFILE")
+
+            Text("Groups")
+            List {
+                ForEach(groups) { group in
+                    NavigationLink(value: group) {
+                        Text(group.name)
+                    }
+                }
+            }
+            .onAppear(perform: getGroups)
+            .navigationDestination(for: Group.self) { group in
+                GroupView(group: group)
             }
         }
-        .onAppear(perform: getGroups)
     }
 
     func getGroups() {
