@@ -13,6 +13,7 @@ struct ProfileView: View {
 
     @State var profile: Profile? = { Local.profile }()
     @State var groups: [Group] = []
+    @State var groupInvitationsWithGroups = [GroupInvitation.WithGroup]()
 
     @State var cancellables = Set<AnyCancellable>()
     @State var path = NavigationPath()
@@ -28,23 +29,46 @@ struct ProfileView: View {
                     NavigationLink(value: group) {
                         Text(group.name)
                     }
-                }
+                }.onAppear(perform: getGroups)
+
+                ForEach(groupInvitationsWithGroups) { invitationInfo in
+                    Text(invitationInfo.invitation.sender)
+                    Text(invitationInfo.group.name)
+                }.onAppear(perform: getGroupInvitations)
             }
-            .onAppear(perform: getGroups)
+
             .navigationDestination(for: Group.self) { group in
                 GroupView(group: group)
             }
+
+//            Text("Invitations")
+//            List {
+//                ForEach(groupInvitations) { invitation in
+//                    Text(invitation.sender)
+//                }
+//            }
         }
     }
 
     func getGroups() {
-        Provide.getGroups().sink { completion in
+        Provide.getMyGroups().sink { completion in
             if case let .failure(error) = completion {
                 log("Get Groups Failed: \(error)")
             }
         } receiveValue: { groups in
             log("Get Groups Succeeded - count: \(groups.count)", level: .verbose)
             self.groups = groups
+        }.store(in: &cancellables)
+    }
+
+    func getGroupInvitations() {
+        Provide.getMyGroupInvitations().sink { completion in
+            if case let .failure(error) = completion {
+                log("Get Group Invitations Failed: \(error)")
+            }
+        } receiveValue: { invitations in
+            log("Get Group Invitations Succeeded - count: \(invitations.count)", level: .verbose)
+            self.groupInvitationsWithGroups = invitations
         }.store(in: &cancellables)
     }
 }

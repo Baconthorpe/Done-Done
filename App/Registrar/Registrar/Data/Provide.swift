@@ -78,12 +78,23 @@ enum Provide {
     }
 
     static func sendGroupInvitation(group: String, recipient: String) -> AnyPublisher<GroupInvitation, Error> {
-        FirebaseHandler.sendGroupInvitation(GroupInvitation.Draft(group: group, recipient: recipient))
+        Just(Local.profile?.name ?? "")
+            .map { (GroupInvitation.Draft(group: group, senderName: $0, recipient: recipient)) }
+            .flatMap(FirebaseHandler.sendGroupInvitation)
             .eraseToAnyPublisher()
     }
 
-    static func getMyGroupInvitations() -> AnyPublisher<[GroupInvitation], Error> {
+    static func getMyGroupInvitations() -> AnyPublisher<[GroupInvitation.WithGroup], Error> {
         FirebaseHandler.getMyGroupInvitations()
+            .flatMap({ invitations in
+                FirebaseHandler.getGroups(groupIDs: invitations.map(\.group))
+                    .map { groups in
+                        invitations.compactMap { invitation in
+                            guard let correctGroup = groups.first(where: { $0.id == invitation.group }) else { return nil }
+                            return GroupInvitation.WithGroup(invitation: invitation, group: correctGroup)
+                        }
+                    }
+            })
             .eraseToAnyPublisher()
     }
 
@@ -92,7 +103,7 @@ enum Provide {
             .eraseToAnyPublisher()
     }
 
-    static func getGroups() -> AnyPublisher<[Group], Error> {
+    static func getMyGroups() -> AnyPublisher<[Group], Error> {
         Just(Local.profile?.memberGroups)
             .map { $0 ?? [] }
             .flatMap(FirebaseHandler.getGroups)

@@ -289,6 +289,7 @@ enum FirebaseHandler {
                 id: newGroupInvitationRef.documentID,
                 group: draft.group,
                 sender: currentUserID,
+                senderName: draft.senderName,
                 recipient: draft.recipient
             )
 
