@@ -32,6 +32,13 @@ struct ProfileView: View {
                 }.onAppear(perform: getGroups)
 
                 ForEach(groupInvitationsWithGroups) { invitationInfo in
+                    HStack {
+                        VStack {
+                            Text("You've been invited to \(invitationInfo.group.name)")
+                            Text("by \(invitationInfo.invitation.sender)")
+                        }
+                        Button("Accept") { acceptInvitation(invitationInfo.invitation) }
+                    }
                     Text(invitationInfo.invitation.sender)
                     Text(invitationInfo.group.name)
                 }.onAppear(perform: getGroupInvitations)
@@ -40,13 +47,6 @@ struct ProfileView: View {
             .navigationDestination(for: Group.self) { group in
                 GroupView(group: group)
             }
-
-//            Text("Invitations")
-//            List {
-//                ForEach(groupInvitations) { invitation in
-//                    Text(invitation.sender)
-//                }
-//            }
         }
     }
 
@@ -69,6 +69,16 @@ struct ProfileView: View {
         } receiveValue: { invitations in
             log("Get Group Invitations Succeeded - count: \(invitations.count)", level: .verbose)
             self.groupInvitationsWithGroups = invitations
+        }.store(in: &cancellables)
+    }
+
+    func acceptInvitation(_ invitation: GroupInvitation) {
+        Provide.acceptGroupInvitation(invitation).sink { completion in
+            if case let .failure(error) = completion {
+                log("Accept Invitation Failed: \(error)")
+            }
+        } receiveValue: { _ in
+            log("Accept Invitation Succeeded", level: .verbose)
         }.store(in: &cancellables)
     }
 }

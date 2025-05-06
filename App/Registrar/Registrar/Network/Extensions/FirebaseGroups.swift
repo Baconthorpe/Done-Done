@@ -110,16 +110,30 @@ extension FirebaseHandler {
         Future { promise in
             guard let currentUserID = currentUser?.uid else { promise(Result.failure(Failure.signInNeeded)); return }
             guard invitation.recipient == currentUserID else { promise(Result.failure(Failure.actionNotAllowed)); return }
+            guard let invitationID = invitation.id else { promise(Result.failure(Failure.unknown)); return }
 
             let groupRef = firestore.collection(DatabaseKey.group).document(invitation.group)
+            let profileRef = firestore.collection(DatabaseKey.profile).document(currentUserID)
+            let invitationRef = firestore.collection(DatabaseKey.groupInvitation).document(invitationID)
 
-            Task {
-                do {
-                    try await groupRef.updateData([Group.DatabaseKey.members: FieldValue.arrayUnion([currentUserID])])
-                    promise(Result.success(()))
-                } catch {
-                    promise(Result.failure(Failure.firebase(error)))
+            firestore.runTransaction { transaction, errorPointer in
+                transaction.updateData(
+                    [Group.DatabaseKey.members: FieldValue.arrayUnion([currentUserID])],
+                    forDocument: groupRef
+                )
+                transaction.updateData(
+                    [Profile.DatabaseKey.memberGroups: FieldValue.arrayUnion([invitation.group])],
+                    forDocument: profileRef
+                )
+                transaction.deleteDocument(invitationRef)
+                return
+            } completion: { _, error in
+                if let error = error {
+                    promise(.failure(Failure.firebase(error)))
+                    return
                 }
+
+                promise(.success(()))
             }
         }
     }
