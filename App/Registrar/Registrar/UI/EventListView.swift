@@ -40,13 +40,8 @@ struct EventListView: View {
     }
 
     func getEvents() {
-        Provide.getMyEvents().sink { completion in
-            if case let .failure(error) = completion {
-                log("Get Events Failed: \(error)")
-            }
-        } receiveValue: { events in
-            log("Get Events Succeeded - count: \(events.count)", level: .verbose)
-            self.events = events
-        }.store(in: &cancellables)
+        Provide.getMyEvents()
+            .sinkValue($events, logPrefix: "Get Events")
+            .store(in: &cancellables)
     }
 }

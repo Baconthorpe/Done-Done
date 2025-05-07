@@ -46,12 +46,7 @@ struct CreateGroupView: View {
         Provide.createGroup(
             name: name,
             description: description
-        ).sink { completion in
-            if case let .failure(error) = completion {
-                log("Create Group Failed: \(error)")
-            }
-        } receiveValue: { groupCreated in
-            log("Group created: \(groupCreated)", level: .verbose)
+        ).sinkCompletion(logPrefix: "Create Group") { _ in
             path.removeLast()
         }.store(in: &cancellables)
     }

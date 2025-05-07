@@ -6,15 +6,21 @@
 //
 
 import Combine
+import SwiftUI
 
 extension Publisher {
-    func sinkValue(_ body: @escaping (Output) -> Void) -> AnyCancellable {
+    func sinkValue(_ binding: Binding<Output>, logPrefix: String = "Publisher") -> AnyCancellable {
+        sinkCompletion(logPrefix: logPrefix) { binding.wrappedValue = $0 }
+    }
+
+    func sinkCompletion(logPrefix: String = "Publisher", _ completion: @escaping (Output) -> Void) -> AnyCancellable {
         sink { completion in
             if case let .failure(error) = completion {
-                log("Error: \(error)")
+                log("\(logPrefix) failed with error: \(error)")
             }
         } receiveValue: { output in
-            body(output)
+            log("\(logPrefix) succeeded with value: \(output)", level: .verbose)
+            completion(output)
         }
     }
 

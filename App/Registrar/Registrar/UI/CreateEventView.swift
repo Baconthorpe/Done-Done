@@ -46,12 +46,7 @@ struct CreateEventView: View {
         Provide.createEvent(
             title: title,
             description: description
-        ).sink { completion in
-            if case let .failure(error) = completion {
-                log("Create Event Failed: \(error)")
-            }
-        } receiveValue: { eventCreated in
-            log("Event created: \(eventCreated)", level: .verbose)
+        ).sinkCompletion(logPrefix: "Create Event") { _ in
             path.removeLast()
         }.store(in: &cancellables)
     }

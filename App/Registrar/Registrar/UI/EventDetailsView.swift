@@ -29,13 +29,8 @@ struct EventDetailsView: View {
     }
 
     func getAttending() {
-        Provide.getProfilesOfAttending(userIDs: event.attending).sink { completion in
-            if case let .failure(error) = completion {
-                log("Get Attending Profiles Failed: \(error)")
-            }
-        } receiveValue: { profiles in
-            log("Get Attending Profiles Succeeded - count: \(profiles.count)", level: .verbose)
-            attendingProfiles = profiles
-        }.store(in: &cancellables)
+        Provide.getProfilesOfAttending(userIDs: event.attending)
+            .sinkValue($attendingProfiles, logPrefix: "Get Attending Profiles")
+            .store(in: &cancellables)
     }
 }

@@ -42,14 +42,9 @@ struct InvitePersonView: View {
     }
 
     func search() {
-        Provide.searchForProfiles(name: nameSearch).sink { completion in
-            if case let .failure(error) = completion {
-                log("Search Profiles Failed: \(error)")
-            }
-        } receiveValue: { profiles in
-            log("Search Profiles Succeeded - count: \(profiles.count)", level: .verbose)
-            self.profiles = profiles
-        }.store(in: &cancellables)
+        Provide.searchForProfiles(name: nameSearch)
+            .sinkValue($profiles, logPrefix: "Search Profiles")
+            .store(in: &cancellables)
     }
 
     func sendInvitation() {

@@ -40,46 +40,29 @@ struct SignInView: View {
 
     // MARK: - Sign In Methods
     func signInWithGoogle() {
-        Provide.signInWithGoogle().sink { completion in
-            if case let .failure(error) = completion {
-                log("Sign In Failed: \(error)")
-            }
-        } receiveValue: { profile in
-            log("Sign In Succeeded", level: .verbose)
-            flow.location = .signedIn(withProfile: profile != nil)
-        }.store(in: &cancellables)
+        Provide.signInWithGoogle()
+            .sinkCompletion(logPrefix: "Sign In With Google") {
+                flow.location = .signedIn(withProfile: $0 != nil)
+            }.store(in: &cancellables)
     }
 
     func signUpWithEmail() {
-        Provide.signUp(email: email, password: password).sink { completion in
-            if case let .failure(error) = completion {
-                log("Email/Password Sign Up Failed: \(error)")
-            }
-        } receiveValue: { profile in
-            log("Email/Password Sign Up Succeeded", level: .verbose)
-            flow.location = .signedIn(withProfile: profile != nil)
-        }.store(in: &cancellables)
+        Provide.signUp(email: email, password: password)
+            .sinkCompletion(logPrefix: "Email/Password Sign Up") {
+                flow.location = .signedIn(withProfile: $0 != nil)
+            }.store(in: &cancellables)
     }
 
     func signInWithEmail() {
-        Provide.signIn(email: email, password: password).sink { completion in
-            if case let .failure(error) = completion {
-                log("Email/Password Sign In Failed: \(error)")
-            }
-        } receiveValue: { profile in
-            log("Email/Password Sign In Succeeded", level: .verbose)
-            flow.location = .signedIn(withProfile: profile != nil)
-        }.store(in: &cancellables)
+        Provide.signIn(email: email, password: password)
+            .sinkCompletion(logPrefix: "Email/Password Sign In") {
+                flow.location = .signedIn(withProfile: $0 != nil)
+            }.store(in: &cancellables)
     }
 
     func signInAnonymously() {
-        Provide.signInAnonymously().sink { completion in
-            if case let .failure(error) = completion {
-                log("Anonymous Sign In Failed: \(error)")
-            }
-        } receiveValue: { profile in
-            log("Anonymous Sign In Succeeded", level: .verbose)
-            flow.location = .signedIn(withProfile: profile != nil)
+        Provide.signInAnonymously().sinkCompletion(logPrefix: "Anonymous Sign In") {
+            flow.location = .signedIn(withProfile: $0 != nil)
         }.store(in: &cancellables)
     }
 

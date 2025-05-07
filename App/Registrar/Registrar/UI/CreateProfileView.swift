@@ -41,13 +41,9 @@ struct CreateProfileView: View {
             return
         }
 
-        Provide.createProfile(name: name).sink { completion in
-            if case let .failure(error) = completion {
-                log("Create Profile Failed: \(error)")
-            }
-        } receiveValue: { newProfile in
-            log("Created Profile: \(newProfile)", level: .verbose)
-            flow.location = .signedIn(withProfile: true)
-        }.store(in: &cancellables)
+        Provide.createProfile(name: name)
+            .sinkCompletion(logPrefix: "Create Profile") { _ in
+                flow.location = .signedIn(withProfile: true)
+            }.store(in: &cancellables)
     }
 }

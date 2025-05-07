@@ -39,24 +39,14 @@ struct GroupView: View {
     }
 
     func getOrganizers() {
-        Provide.getGroupOrganizers(group).sink { completion in
-            if case let .failure(error) = completion {
-                log("Get Group Organizers Failed: \(error)")
-            }
-        } receiveValue: { profiles in
-            log("Search Profiles Succeeded - count: \(profiles.count)", level: .verbose)
-            self.organizers = profiles
-        }.store(in: &cancellables)
+        Provide.getGroupOrganizers(group)
+            .sinkValue($organizers, logPrefix: "Get Group Organizers")
+            .store(in: &cancellables)
     }
 
     func getMembers() {
-        Provide.getGroupMembers(group).sink { completion in
-            if case let .failure(error) = completion {
-                log("Get Group Organizers Failed: \(error)")
-            }
-        } receiveValue: { profiles in
-            log("Search Profiles Succeeded - count: \(profiles.count)", level: .verbose)
-            self.members = profiles
-        }.store(in: &cancellables)
+        Provide.getGroupMembers(group)
+            .sinkValue($members, logPrefix: "Get Group Members")
+            .store(in: &cancellables)
     }
 }

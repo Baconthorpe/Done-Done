@@ -51,34 +51,20 @@ struct ProfileView: View {
     }
 
     func getGroups() {
-        Provide.getMyGroups().sink { completion in
-            if case let .failure(error) = completion {
-                log("Get Groups Failed: \(error)")
-            }
-        } receiveValue: { groups in
-            log("Get Groups Succeeded - count: \(groups.count)", level: .verbose)
-            self.groups = groups
-        }.store(in: &cancellables)
+        Provide.getMyGroups()
+            .sinkValue($groups, logPrefix: "Get Groups")
+            .store(in: &cancellables)
     }
 
     func getGroupInvitations() {
-        Provide.getMyGroupInvitations().sink { completion in
-            if case let .failure(error) = completion {
-                log("Get Group Invitations Failed: \(error)")
-            }
-        } receiveValue: { invitations in
-            log("Get Group Invitations Succeeded - count: \(invitations.count)", level: .verbose)
-            self.groupInvitationsWithGroups = invitations
-        }.store(in: &cancellables)
+        Provide.getMyGroupInvitations()
+            .sinkValue($groupInvitationsWithGroups, logPrefix: "Get Group Invitations")
+            .store(in: &cancellables)
     }
 
     func acceptInvitation(_ invitation: GroupInvitation) {
-        Provide.acceptGroupInvitation(invitation).sink { completion in
-            if case let .failure(error) = completion {
-                log("Accept Invitation Failed: \(error)")
-            }
-        } receiveValue: { _ in
-            log("Accept Invitation Succeeded", level: .verbose)
-        }.store(in: &cancellables)
+        Provide.acceptGroupInvitation(invitation)
+            .sinkCompletion(logPrefix: "Accept Invitation") { }
+            .store(in: &cancellables)
     }
 }
