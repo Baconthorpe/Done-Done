@@ -9,7 +9,7 @@ import SwiftUI
 import Combine
 
 struct CreateGroupView: View {
-    @Binding var path: NavigationPath
+    @EnvironmentObject var flow: Flow
 
     @State var name: String = ""
     @State var description: String = ""
@@ -47,7 +47,7 @@ struct CreateGroupView: View {
             name: name,
             description: description
         ).sinkCompletion(logPrefix: "Create Group") { _ in
-            path.removeLast()
+            flow.path.removeLast()
         }.store(in: &cancellables)
     }
 }

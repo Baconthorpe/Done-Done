@@ -7,7 +7,7 @@
 
 import FirebaseFirestore
 
-struct Profile: Codable, Identifiable {
+struct Profile: Codable, Identifiable, Hashable {
 
     var id: String { userID }
     let userID: String

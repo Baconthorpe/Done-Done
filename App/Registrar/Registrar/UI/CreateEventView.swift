@@ -9,7 +9,7 @@ import SwiftUI
 import Combine
 
 struct CreateEventView: View {
-    @Binding var path: NavigationPath
+    @EnvironmentObject var flow: Flow
 
     @State var title: String = ""
     @State var description: String = ""
@@ -47,7 +47,7 @@ struct CreateEventView: View {
             title: title,
             description: description
         ).sinkCompletion(logPrefix: "Create Event") { _ in
-            path.removeLast()
+            flow.path.removeLast()
         }.store(in: &cancellables)
     }
 }

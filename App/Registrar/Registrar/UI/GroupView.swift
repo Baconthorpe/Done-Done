@@ -22,26 +22,26 @@ struct GroupView: View {
         VStack {
             Text(group.name)
 
-            Text("Organizers")
-            List {
-                ForEach(organizers) {
-                    Text($0.name)
-                }
-            }.onAppear(perform: getOrganizers)
-
             Text("Members")
             List {
-                ForEach(members) {
-                    Text($0.name)
+                ForEach(members) { member in
+                    HStack {
+                        Text(member.name)
+                        if group.organizers.contains(member.id) {
+                            Image(systemName: "checkmark")
+                        }
+                    }
                 }
             }.onAppear(perform: getMembers)
-        }
-    }
 
-    func getOrganizers() {
-        Provide.getGroupOrganizers(group)
-            .sinkValue($organizers, logPrefix: "Get Group Organizers")
-            .store(in: &cancellables)
+            NavigationLink(value: group) {
+                Text("Invite A New Member")
+            }
+        }
+
+        .navigationDestination(for: Group.self) { group in
+            InvitePersonView(group: group)
+        }
     }
 
     func getMembers() {

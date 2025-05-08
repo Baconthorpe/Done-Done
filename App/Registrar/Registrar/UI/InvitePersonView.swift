@@ -11,6 +11,8 @@ import Combine
 struct InvitePersonView: View {
     @EnvironmentObject var flow: Flow
 
+    let group: Group
+
     @State private var nameSearch: String = ""
     @State private var profiles: [Profile] = []
     @State private var selectedProfile: Profile? = nil
@@ -27,27 +29,34 @@ struct InvitePersonView: View {
                     .onSubmit(search)
             }
 
-            List {
+            List(selection: $selectedProfile) {
                 ForEach(profiles) { profile in
                     Text(profile.name)
                 }
             }
+            .environment(\.editMode, .constant(.active))
 
             Button {
                 sendInvitation()
             } label: {
                 Text("Send Invitation")
             }
+            .disabled(selectedProfile == nil)
         }
     }
 
     func search() {
+        selectedProfile = nil
         Provide.searchForProfiles(name: nameSearch)
             .sinkValue($profiles, logPrefix: "Search Profiles")
             .store(in: &cancellables)
     }
 
     func sendInvitation() {
-//        Provide.sendGroupInvitation(group: <#T##String#>, recipient: <#T##String#>)
+        guard let groupID = group.id, let selectedProfile else { return }
+        Provide.sendGroupInvitation(group: groupID, recipient: selectedProfile.id)
+            .sinkCompletion(logPrefix: "Invite To Group") { _ in
+                flow.path.removeLast()
+            }.store(in: &cancellables)
     }
 }

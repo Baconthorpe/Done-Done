@@ -16,10 +16,9 @@ struct ProfileView: View {
     @State var groupInvitationsWithGroups = [GroupInvitation.WithGroup]()
 
     @State var cancellables = Set<AnyCancellable>()
-    @State var path = NavigationPath()
 
     var body: some View {
-        NavigationStack(path: $path) {
+        NavigationStack(path: $flow.path) {
 
             Text(profile?.name ?? "PROFILE")
 

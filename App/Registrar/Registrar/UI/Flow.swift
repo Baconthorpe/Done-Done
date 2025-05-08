@@ -6,6 +6,7 @@
 //
 
 import Combine
+import SwiftUI
 
 class Flow: ObservableObject {
     enum Location {
@@ -18,5 +19,6 @@ class Flow: ObservableObject {
         case creatingGroup
     }
 
+    @Published var path = NavigationPath()
     @Published var location: Location = .signedOut
 }
