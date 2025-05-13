@@ -23,7 +23,7 @@ extension FirebaseHandler {
 
             let newEventRef = firestore.collection(DatabaseKey.event).addDocument(data: formattedDraft) { error in
                 if let error = error {
-                    promise(Result.failure(error))
+                    promise(Result.failure(Failure.firebase(error)))
                     return
                 }
             }
@@ -112,37 +112,25 @@ extension FirebaseHandler {
                 }
         }
     }
-}
 
-extension FirebaseHandler {
-    private static func runTransaction(
-        _ action: @escaping (Transaction, ErrorPointer) throws -> ()
-    ) -> Future<Bool, Error> {
+    static func sendEventInvitations(_ drafts: [EventInvitation.Draft]) -> Future<Void, Error> {
         Future { promise in
-            Task {
-                var errorToThrow: Error?
-                let _ = try await firestore.runTransaction { transaction, errorPointer in
-                    do { try action(transaction, errorPointer) } catch { errorToThrow = error }
-                    return nil
-                }
-                if let errorToThrow { promise(.failure(errorToThrow)) }
-                promise(.success(true))
+            guard let currentUserID = currentUser?.uid else { promise(Result.failure(Failure.signInNeeded)); return }
+
+            let batch = firestore.batch()
+            var formattedDrafts = drafts.map { $0.asDictionary() }
+
+            for draft in formattedDrafts {
+                batch.setData(draft, forDocument: firestore.collection(DatabaseKey.eventInvitation).document())
             }
-        }
-    }
 
-    private static func experiment() -> Future<Bool, Error> {
-        Future { promise in
-            Task { let _ = try await throwingThing() }
-            promise(.success(true))
-        }
-    }
-
-    private static func throwingThing() async throws -> Bool {
-        if true {
-            return true
-        } else {
-            throw Failure.signInNeeded
+            batch.commit { error in
+                if let error = error {
+                    promise(Result.failure(Failure.firebase(error)))
+                    return
+                }
+                promise(Result.success(()))
+            }
         }
     }
 }

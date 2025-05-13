@@ -95,7 +95,7 @@ extension FirebaseHandler {
         Future { promise in
             Auth.auth().signIn(withEmail: email, password: password) { authResult, error in
                 if let error = error {
-                    promise(Result.failure(error))
+                    promise(Result.failure(Failure.firebase(error)))
                     return
                 }
                 guard let _ = authResult?.user.uid else {
@@ -111,7 +111,7 @@ extension FirebaseHandler {
         Future { promise in
             Auth.auth().signInAnonymously() { authResult, error in
                 if let error = error {
-                    promise(Result.failure(error))
+                    promise(Result.failure(Failure.firebase(error)))
                     return
                 }
                 promise(Result.success(()))

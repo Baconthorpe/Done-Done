@@ -69,7 +69,7 @@ extension FirebaseHandler {
 
             let newGroupInvitationRef = firestore.collection(DatabaseKey.groupInvitation).addDocument(data: formattedDraft) { error in
                 if let error = error {
-                    promise(Result.failure(error))
+                    promise(Result.failure(Failure.firebase(error)))
                     return
                 }
             }

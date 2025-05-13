@@ -33,4 +33,9 @@ extension Provide {
         FirebaseHandler.getProfilesOfAttending(userIDs: userIDs)
             .eraseToAnyPublisher()
     }
+
+    static func sendEventInvitations(drafts: [EventInvitation.Draft]) -> AnyPublisher<Void, Error> {
+        FirebaseHandler.sendEventInvitations(drafts)
+            .eraseToAnyPublisher()
+    }
 }

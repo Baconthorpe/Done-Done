@@ -25,6 +25,7 @@ enum FirebaseHandler {
 
         static let profile = "profiles"
         static let event = "events"
+        static let eventInvitation = "eventInvitations"
         static let group = "groups"
         static let groupInvitation = "groupInvitations"
     }

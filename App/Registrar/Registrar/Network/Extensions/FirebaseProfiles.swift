@@ -47,7 +47,7 @@ extension FirebaseHandler {
 
             firestore.collection(DatabaseKey.profile).document(currentUserID).setData(formattedDraft) { error in
                 if let error = error {
-                    promise(Result.failure(error))
+                    promise(Result.failure(Failure.firebase(error)))
                     return
                 }
 
