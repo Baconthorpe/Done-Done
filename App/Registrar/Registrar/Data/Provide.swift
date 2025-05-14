@@ -11,5 +11,6 @@ import Combine
 enum Provide {
     enum Failure: Error {
         case actionRequiresProfile
+        case actionRequiresEventID
     }
 }

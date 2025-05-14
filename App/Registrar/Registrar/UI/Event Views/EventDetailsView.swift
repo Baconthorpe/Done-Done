@@ -10,6 +10,14 @@ import Combine
 
 struct EventDetailsView: View {
     let event: Event
+    var userCanInvite: Bool {
+        let profile = Local.profile!
+        if event.creator == profile.userID || event.attending.contains(profile.userID) {
+            return true
+        }
+        return false
+    }
+
     @State var attendingProfiles: [Profile] = []
 
     @State var cancellables = Set<AnyCancellable>()
@@ -24,6 +32,10 @@ struct EventDetailsView: View {
                 ForEach(attendingProfiles) { profile in
                     Text(profile.name)
                 }
+            }
+
+            if userCanInvite {
+                Button("Invite") { }
             }
         }.navigationTitle(event.title)
     }

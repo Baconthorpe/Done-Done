@@ -34,8 +34,22 @@ extension Provide {
             .eraseToAnyPublisher()
     }
 
-    static func sendEventInvitations(drafts: [EventInvitation.Draft]) -> AnyPublisher<Void, Error> {
-        FirebaseHandler.sendEventInvitations(drafts)
+    static func sendEventInvitations(event: Event, recipients: [Profile]) -> AnyPublisher<Void, Error> {
+        Just(Local.profile)
+            .tryMap {
+                guard let profile = $0 else { throw Failure.actionRequiresProfile }
+                guard let eventID = event.id else { throw Failure.actionRequiresEventID }
+                return recipients.map {
+                    EventInvitation.Draft(
+                        event: eventID,
+                        eventName: event.title,
+                        senderName: profile.name,
+                        recipient: $0.id,
+                        recipientName: $0.name
+                    )
+                }
+            }
+            .flatMap(FirebaseHandler.sendEventInvitations)
             .eraseToAnyPublisher()
     }
 }
