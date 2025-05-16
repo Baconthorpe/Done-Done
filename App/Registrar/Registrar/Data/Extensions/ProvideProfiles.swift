@@ -22,4 +22,14 @@ extension Provide {
         FirebaseHandler.getProfilesByName(name)
             .eraseToAnyPublisher()
     }
+
+    static func getProfilesForMembersOfMyGroups() -> AnyPublisher<[Profile], Error> {
+        Just(Local.profile)
+            .tryMap {
+                guard let profile = $0 else { throw Failure.actionRequiresProfile }
+                return profile.memberGroups
+            }
+            .flatMap(FirebaseHandler.getProfilesForGroups)
+            .eraseToAnyPublisher()
+    }
 }

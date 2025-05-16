@@ -8,7 +8,7 @@
 import SwiftUI
 import Combine
 
-struct InvitePersonView: View {
+struct InviteToGroupView: View {
     @EnvironmentObject var flow: Flow
 
     let group: Group

@@ -40,7 +40,7 @@ struct GroupView: View {
         }
 
         .navigationDestination(for: Group.self) { group in
-            InvitePersonView(group: group)
+            InviteToGroupView(group: group)
         }
     }
 

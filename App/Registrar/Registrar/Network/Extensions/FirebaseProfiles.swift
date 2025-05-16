@@ -80,4 +80,21 @@ extension FirebaseHandler {
                 }
         }
     }
+
+    static func getProfilesForGroups(_ groupIDs: [String]) -> Future<[Profile], Error> {
+        Future { promise in
+            firestore.collection(DatabaseKey.profile)
+                .whereField(Profile.DatabaseKey.memberGroups, in: groupIDs)
+                .getDocuments { querySnapshot, err in
+                    guard let querySnapshot = querySnapshot else {
+                        promise(Result.failure(Failure.unknown))
+                        return
+                    }
+                    let profiles: [Profile] = querySnapshot.documents.compactMap { document in
+                        try? document.data(as: Profile.self)
+                    }
+                    promise(Result.success(profiles))
+                }
+        }
+    }
 }

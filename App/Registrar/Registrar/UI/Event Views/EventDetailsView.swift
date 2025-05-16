@@ -35,9 +35,15 @@ struct EventDetailsView: View {
             }
 
             if userCanInvite {
-                Button("Invite") { }
+                NavigationLink("Invite Others", value: Flow.Go.invitingToEvent)
             }
-        }.navigationTitle(event.title)
+        }
+        .navigationTitle(event.title)
+        .navigationDestination(for: Flow.Go.self) { flow in
+            if flow == .invitingToEvent {
+                InviteToEventView(event: event)
+            }
+        }
     }
 
     func getAttending() {
