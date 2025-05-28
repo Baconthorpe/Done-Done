@@ -78,18 +78,6 @@ extension FirebaseHandler {
         }
     }
 
-    static func joinEvent(_ eventID: String) -> Future<Bool, Error> {
-        Future { promise in
-            Task {
-                guard let currentUserID = currentUser?.uid else { promise(Result.failure(Failure.signInNeeded)); return }
-
-                let eventRef = firestore.collection(DatabaseKey.event).document(eventID)
-
-                eventRef.updateData([Event.DatabaseKey.attending: FieldValue.arrayUnion([currentUserID])])
-            }
-        }
-    }
-
     static func getProfilesOfAttending(userIDs: [String]) -> Future<[Profile], Error> {
         Future { promise in
             guard !userIDs.isEmpty else {
@@ -115,10 +103,10 @@ extension FirebaseHandler {
 
     static func sendEventInvitations(_ drafts: [EventInvitation.Draft]) -> Future<Void, Error> {
         Future { promise in
-            guard let currentUserID = currentUser?.uid else { promise(Result.failure(Failure.signInNeeded)); return }
+            guard currentUser != nil else { promise(Result.failure(Failure.signInNeeded)); return }
 
             let batch = firestore.batch()
-            var formattedDrafts = drafts.map { $0.asDictionary() }
+            let formattedDrafts = drafts.map { $0.asDictionary() }
 
             for draft in formattedDrafts {
                 batch.setData(draft, forDocument: firestore.collection(DatabaseKey.eventInvitation).document())
@@ -130,6 +118,71 @@ extension FirebaseHandler {
                     return
                 }
                 promise(Result.success(()))
+            }
+        }
+    }
+
+    static func getEventInvitations() -> Future<[EventInvitation], Error> {
+        Future { promise in
+            guard let currentUserID = currentUser?.uid else { promise(Result.failure(Failure.signInNeeded)); return }
+
+            firestore
+                .collection(DatabaseKey.eventInvitation)
+                .whereField(EventInvitation.DatabaseKey.recipient, isEqualTo: currentUserID)
+                .getDocuments { querySnapshot, err in
+                    guard let querySnapshot = querySnapshot else {
+                        promise(Result.failure(Failure.unknown))
+                        return
+                    }
+                    let eventInvitationss: [EventInvitation] = querySnapshot.documents.compactMap { document in
+                        try? document.data(as: EventInvitation.self)
+                    }
+                    promise(Result.success(eventInvitationss))
+                }
+        }
+    }
+
+    static func acceptEventInvitation(_ eventInvitationID: String, eventID: String) -> Future<Void, Error> {
+        Future { promise in
+            guard let currentUserID = currentUser?.uid else { promise(Result.failure(Failure.signInNeeded)); return }
+
+            let profileRef = firestore.collection(DatabaseKey.profile).document(currentUserID)
+            let eventRef = firestore.collection(DatabaseKey.event).document(eventID)
+            let inviteRef = firestore.collection(DatabaseKey.eventInvitation).document(eventInvitationID)
+
+            firestore.runTransaction { transaction, errorPointer in
+                transaction.updateData(
+                    [Profile.DatabaseKey.attendingEvents: FieldValue.arrayUnion([eventID])],
+                    forDocument: profileRef
+                )
+                transaction.updateData(
+                    [Event.DatabaseKey.attending: FieldValue.arrayUnion([currentUserID])],
+                    forDocument: eventRef
+                )
+                transaction.deleteDocument(inviteRef)
+                return
+            } completion: { _, error in
+                if let error = error {
+                    promise(.failure(Failure.firebase(error)))
+                    return
+                }
+
+                promise(.success(()))
+            }
+        }
+    }
+
+    static func rejectEventInvitation(_ eventInvitationID: String) -> Future<Void, Error> {
+        Future { promise in
+            let inviteRef = firestore.collection(DatabaseKey.eventInvitation).document(eventInvitationID)
+
+            inviteRef.delete { error in
+                if let error = error {
+                    promise(.failure(Failure.firebase(error)))
+                    return
+                }
+
+                promise(.success(()))
             }
         }
     }

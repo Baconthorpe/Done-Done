@@ -39,6 +39,21 @@ extension Provide {
             .eraseToAnyPublisher()
     }
 
+    static func rejectGroupInvitation(_ invitation: GroupInvitation) -> AnyPublisher<Void, Error> {
+        FirebaseHandler.rejectGroupInvitation(invitation)
+            .eraseToAnyPublisher()
+    }
+
+    static func leaveGroup(_ group: Group) -> AnyPublisher<Void, Error> {
+        Just(group)
+            .tryMap {
+                guard let groupID = $0.id else { throw Failure.actionRequiresGroupID }
+                return groupID
+            }
+            .flatMap(FirebaseHandler.leaveGroup)
+            .eraseToAnyPublisher()
+    }
+
     static func getMyGroups() -> AnyPublisher<[Group], Error> {
         Just(Local.profile?.memberGroups)
             .map { $0 ?? [] }

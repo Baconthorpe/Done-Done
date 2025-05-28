@@ -52,4 +52,29 @@ extension Provide {
             .flatMap(FirebaseHandler.sendEventInvitations)
             .eraseToAnyPublisher()
     }
+
+    static func getEventInvitations() -> AnyPublisher<[EventInvitation], Error> {
+        FirebaseHandler.getEventInvitations()
+            .eraseToAnyPublisher()
+    }
+
+    static func acceptEventInvitation(_ invitation: EventInvitation) -> AnyPublisher<Void, Error> {
+        Just(invitation)
+            .tryMap {
+                guard let invitationID = $0.id else { throw Failure.actionRequiresEventID }
+                return (invitationID, $0.event)
+            }
+            .flatMap(FirebaseHandler.acceptEventInvitation)
+            .eraseToAnyPublisher()
+    }
+
+    static func rejectEventInvitation(_ invitation: EventInvitation) -> AnyPublisher<Void, Error> {
+        Just(invitation)
+            .tryMap {
+                guard let invitationID = $0.id else { throw Failure.actionRequiresEventID }
+                return invitationID
+            }
+            .flatMap(FirebaseHandler.rejectEventInvitation)
+            .eraseToAnyPublisher()
+    }
 }

@@ -138,6 +138,50 @@ extension FirebaseHandler {
         }
     }
 
+    static func rejectGroupInvitation(_ invitation: GroupInvitation) -> Future<Void, Error> {
+        Future { promise in
+            let groupRef = firestore.collection(DatabaseKey.group).document(invitation.group)
+
+            groupRef.delete { error in
+                if let error = error {
+                    promise(.failure(Failure.firebase(error)))
+                    return
+                }
+
+                promise(.success(()))
+            }
+        }
+    }
+
+    static func leaveGroup(_ groupID: String) -> Future<Void, Error> {
+        Future { promise in
+            guard let currentUserID = currentUser?.uid else { promise(Result.failure(Failure.signInNeeded)); return }
+            
+            let groupRef = firestore.collection(DatabaseKey.group).document(groupID)
+            let profileRef = firestore.collection(DatabaseKey.profile).document(currentUserID)
+
+            firestore.runTransaction { transaction, errorPointer in
+                transaction.updateData(
+                    [Group.DatabaseKey.members: FieldValue.arrayRemove([currentUserID])],
+                    forDocument: groupRef
+                )
+                transaction.updateData(
+                    [Profile.DatabaseKey.memberGroups: FieldValue.arrayRemove([groupID]),
+                     Profile.DatabaseKey.organizerGroups: FieldValue.arrayRemove([groupID])],
+                    forDocument: profileRef
+                )
+                return
+            } completion: { _, error in
+                if let error = error {
+                    promise(.failure(Failure.firebase(error)))
+                    return
+                }
+
+                promise(.success(()))
+            }
+        }
+    }
+
     static func getGroups(groupIDs: [String]) -> Future<[Group], Error> {
         Future { promise in
             guard !groupIDs.isEmpty else {

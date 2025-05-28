@@ -12,5 +12,6 @@ enum Provide {
     enum Failure: Error {
         case actionRequiresProfile
         case actionRequiresEventID
+        case actionRequiresGroupID
     }
 }
