@@ -39,8 +39,8 @@ extension Provide {
             .eraseToAnyPublisher()
     }
 
-    static func rejectGroupInvitation(_ invitation: GroupInvitation) -> AnyPublisher<Void, Error> {
-        FirebaseHandler.rejectGroupInvitation(invitation)
+    static func declineGroupInvitation(_ invitation: GroupInvitation) -> AnyPublisher<Void, Error> {
+        FirebaseHandler.declineGroupInvitation(invitation)
             .eraseToAnyPublisher()
     }
 

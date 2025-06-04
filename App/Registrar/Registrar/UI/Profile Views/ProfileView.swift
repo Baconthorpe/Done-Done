@@ -36,7 +36,8 @@ struct ProfileView: View {
                             Text("You've been invited to \(invitationInfo.group.name)")
                             Text("by \(invitationInfo.invitation.sender)")
                         }
-                        Button("Accept") { acceptInvitation(invitationInfo.invitation) }
+                        Button("Accept") { accept(invitation: invitationInfo.invitation) }
+                        Button("Decline") { decline(invitation: invitationInfo.invitation) }
                     }
                     Text(invitationInfo.invitation.sender)
                     Text(invitationInfo.group.name)
@@ -61,9 +62,15 @@ struct ProfileView: View {
             .store(in: &cancellables)
     }
 
-    func acceptInvitation(_ invitation: GroupInvitation) {
+    func accept(invitation: GroupInvitation) {
         Provide.acceptGroupInvitation(invitation)
-            .sinkCompletion(logPrefix: "Accept Invitation") { }
+            .sinkCompletion(logPrefix: "Accept Invitation") { getGroups(); getGroupInvitations() }
+            .store(in: &cancellables)
+    }
+
+    func decline(invitation: GroupInvitation) {
+        Provide.declineGroupInvitation(invitation)
+            .sinkCompletion(logPrefix: "Decline Invitation") { getGroupInvitations() }
             .store(in: &cancellables)
     }
 }

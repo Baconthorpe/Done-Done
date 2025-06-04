@@ -138,7 +138,7 @@ extension FirebaseHandler {
         }
     }
 
-    static func rejectGroupInvitation(_ invitation: GroupInvitation) -> Future<Void, Error> {
+    static func declineGroupInvitation(_ invitation: GroupInvitation) -> Future<Void, Error> {
         Future { promise in
             let groupRef = firestore.collection(DatabaseKey.group).document(invitation.group)
 

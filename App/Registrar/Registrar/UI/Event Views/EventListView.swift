@@ -29,7 +29,7 @@ struct EventListView: View {
                             }
                             VStack {
                                 Button("Accept") { accept(invitation: eventInvitation) }
-                                Button("Reject") { reject(invitation: eventInvitation) }
+                                Button("Decline") { decline(invitation: eventInvitation) }
                             }
                         }
                     }
@@ -68,19 +68,13 @@ struct EventListView: View {
 
     func accept(invitation: EventInvitation) {
         Provide.acceptEventInvitation(invitation)
-            .sinkCompletion { _ in
-                log("Accepted Event Invitation: \(invitation.eventName)", level: .verbose)
-                getData()
-            }
+            .sinkCompletion(logPrefix: "Accept Event Invitation \(invitation.eventName)") { getData() }
             .store(in: &cancellables)
     }
 
-    func reject(invitation: EventInvitation) {
-        Provide.rejectEventInvitation(invitation)
-            .sinkCompletion { _ in
-                log("Rejected Event Invitation: \(invitation.eventName)", level: .verbose)
-                getData()
-            }
+    func decline(invitation: EventInvitation) {
+        Provide.declineEventInvitation(invitation)
+            .sinkCompletion(logPrefix: "Decline Event Invitation \(invitation.eventName)") { getData() }
             .store(in: &cancellables)
     }
 }

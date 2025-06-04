@@ -68,13 +68,13 @@ extension Provide {
             .eraseToAnyPublisher()
     }
 
-    static func rejectEventInvitation(_ invitation: EventInvitation) -> AnyPublisher<Void, Error> {
+    static func declineEventInvitation(_ invitation: EventInvitation) -> AnyPublisher<Void, Error> {
         Just(invitation)
             .tryMap {
                 guard let invitationID = $0.id else { throw Failure.actionRequiresEventID }
                 return invitationID
             }
-            .flatMap(FirebaseHandler.rejectEventInvitation)
+            .flatMap(FirebaseHandler.declineEventInvitation)
             .eraseToAnyPublisher()
     }
 }

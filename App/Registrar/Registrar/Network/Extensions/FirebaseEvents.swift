@@ -172,7 +172,7 @@ extension FirebaseHandler {
         }
     }
 
-    static func rejectEventInvitation(_ eventInvitationID: String) -> Future<Void, Error> {
+    static func declineEventInvitation(_ eventInvitationID: String) -> Future<Void, Error> {
         Future { promise in
             let inviteRef = firestore.collection(DatabaseKey.eventInvitation).document(eventInvitationID)
 
