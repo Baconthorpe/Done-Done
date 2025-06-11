@@ -8,9 +8,9 @@
 import Testing
 import Combine
 import XCTest
-@testable import Registrar
+@testable import Done_Done
 
-struct RegistrarTests {
+struct DoneDoneTests {
 
     var cancellables = Set<AnyCancellable>()
 

@@ -1,6 +1,6 @@
 //
 //  Event.swift
-//  Registrar
+//  Done Done
 //
 //  Created by Ezekiel Abuhoff on 10/18/24.
 //

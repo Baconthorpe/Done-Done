@@ -1,6 +1,6 @@
 //
 //  EventInviteView.swift
-//  Registrar
+//  Done Done
 //
 //  Created by Ezekiel Abuhoff on 5/14/25.
 //

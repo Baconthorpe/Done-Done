@@ -9,7 +9,7 @@ import SwiftUI
 import SwiftData
 
 @main
-struct RegistrarApp: App {
+struct DoneDoneApp: App {
     @StateObject var flow = Flow()
 
     init() {
