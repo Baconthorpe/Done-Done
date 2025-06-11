@@ -35,38 +35,38 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		BA4F50E62CB996D100DEAF3A /* Registrar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Registrar.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		BA4F50F82CB996D200DEAF3A /* RegistrarTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RegistrarTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		BA4F51022CB996D200DEAF3A /* RegistrarUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RegistrarUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		BA4F50E62CB996D100DEAF3A /* Done Done.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Done Done.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		BA4F50F82CB996D200DEAF3A /* Done DoneTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Done DoneTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		BA4F51022CB996D200DEAF3A /* Done DoneUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Done DoneUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		BA5A72592D9DFDBC001E19F2 /* Exceptions for "Registrar" folder in "Registrar" target */ = {
+		BA5A72592D9DFDBC001E19F2 /* Exceptions for "DoneDone" folder in "Done Done" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
 			);
-			target = BA4F50E52CB996D100DEAF3A /* Registrar */;
+			target = BA4F50E52CB996D100DEAF3A /* Done Done */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		BA4F50E82CB996D100DEAF3A /* Registrar */ = {
+		BA4F50E82CB996D100DEAF3A /* DoneDone */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				BA5A72592D9DFDBC001E19F2 /* Exceptions for "Registrar" folder in "Registrar" target */,
+				BA5A72592D9DFDBC001E19F2 /* Exceptions for "DoneDone" folder in "Done Done" target */,
 			);
-			path = Registrar;
+			path = DoneDone;
 			sourceTree = "<group>";
 		};
-		BA4F50FB2CB996D200DEAF3A /* RegistrarTests */ = {
+		BA4F50FB2CB996D200DEAF3A /* DoneDoneTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = RegistrarTests;
+			path = DoneDoneTests;
 			sourceTree = "<group>";
 		};
-		BA4F51052CB996D200DEAF3A /* RegistrarUITests */ = {
+		BA4F51052CB996D200DEAF3A /* DoneDoneUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = RegistrarUITests;
+			path = DoneDoneUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -107,9 +107,9 @@
 		BA4F50DD2CB996D100DEAF3A = {
 			isa = PBXGroup;
 			children = (
-				BA4F50E82CB996D100DEAF3A /* Registrar */,
-				BA4F50FB2CB996D200DEAF3A /* RegistrarTests */,
-				BA4F51052CB996D200DEAF3A /* RegistrarUITests */,
+				BA4F50E82CB996D100DEAF3A /* DoneDone */,
+				BA4F50FB2CB996D200DEAF3A /* DoneDoneTests */,
+				BA4F51052CB996D200DEAF3A /* DoneDoneUITests */,
 				BA4F50E72CB996D100DEAF3A /* Products */,
 			);
 			sourceTree = "<group>";
@@ -117,9 +117,9 @@
 		BA4F50E72CB996D100DEAF3A /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				BA4F50E62CB996D100DEAF3A /* Registrar.app */,
-				BA4F50F82CB996D200DEAF3A /* RegistrarTests.xctest */,
-				BA4F51022CB996D200DEAF3A /* RegistrarUITests.xctest */,
+				BA4F50E62CB996D100DEAF3A /* Done Done.app */,
+				BA4F50F82CB996D200DEAF3A /* Done DoneTests.xctest */,
+				BA4F51022CB996D200DEAF3A /* Done DoneUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -127,9 +127,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		BA4F50E52CB996D100DEAF3A /* Registrar */ = {
+		BA4F50E52CB996D100DEAF3A /* Done Done */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = BA4F510C2CB996D200DEAF3A /* Build configuration list for PBXNativeTarget "Registrar" */;
+			buildConfigurationList = BA4F510C2CB996D200DEAF3A /* Build configuration list for PBXNativeTarget "Done Done" */;
 			buildPhases = (
 				BA4F50E22CB996D100DEAF3A /* Sources */,
 				BA4F50E32CB996D100DEAF3A /* Frameworks */,
@@ -140,9 +140,9 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				BA4F50E82CB996D100DEAF3A /* Registrar */,
+				BA4F50E82CB996D100DEAF3A /* DoneDone */,
 			);
-			name = Registrar;
+			name = "Done Done";
 			packageProductDependencies = (
 				BA4F51192CB99A4A00DEAF3A /* FirebaseAnalytics */,
 				BA4F511B2CB99A4A00DEAF3A /* FirebaseAuth */,
@@ -154,12 +154,12 @@
 				BA5A72542D2CA04D001E19F2 /* GoogleSignIn */,
 			);
 			productName = Registrar;
-			productReference = BA4F50E62CB996D100DEAF3A /* Registrar.app */;
+			productReference = BA4F50E62CB996D100DEAF3A /* Done Done.app */;
 			productType = "com.apple.product-type.application";
 		};
-		BA4F50F72CB996D200DEAF3A /* RegistrarTests */ = {
+		BA4F50F72CB996D200DEAF3A /* Done DoneTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = BA4F510F2CB996D200DEAF3A /* Build configuration list for PBXNativeTarget "RegistrarTests" */;
+			buildConfigurationList = BA4F510F2CB996D200DEAF3A /* Build configuration list for PBXNativeTarget "Done DoneTests" */;
 			buildPhases = (
 				BA4F50F42CB996D200DEAF3A /* Sources */,
 				BA4F50F52CB996D200DEAF3A /* Frameworks */,
@@ -171,18 +171,18 @@
 				BA4F50FA2CB996D200DEAF3A /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				BA4F50FB2CB996D200DEAF3A /* RegistrarTests */,
+				BA4F50FB2CB996D200DEAF3A /* DoneDoneTests */,
 			);
-			name = RegistrarTests;
+			name = "Done DoneTests";
 			packageProductDependencies = (
 			);
 			productName = RegistrarTests;
-			productReference = BA4F50F82CB996D200DEAF3A /* RegistrarTests.xctest */;
+			productReference = BA4F50F82CB996D200DEAF3A /* Done DoneTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		BA4F51012CB996D200DEAF3A /* RegistrarUITests */ = {
+		BA4F51012CB996D200DEAF3A /* Done DoneUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = BA4F51122CB996D200DEAF3A /* Build configuration list for PBXNativeTarget "RegistrarUITests" */;
+			buildConfigurationList = BA4F51122CB996D200DEAF3A /* Build configuration list for PBXNativeTarget "Done DoneUITests" */;
 			buildPhases = (
 				BA4F50FE2CB996D200DEAF3A /* Sources */,
 				BA4F50FF2CB996D200DEAF3A /* Frameworks */,
@@ -194,13 +194,13 @@
 				BA4F51042CB996D200DEAF3A /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				BA4F51052CB996D200DEAF3A /* RegistrarUITests */,
+				BA4F51052CB996D200DEAF3A /* DoneDoneUITests */,
 			);
-			name = RegistrarUITests;
+			name = "Done DoneUITests";
 			packageProductDependencies = (
 			);
 			productName = RegistrarUITests;
-			productReference = BA4F51022CB996D200DEAF3A /* RegistrarUITests.xctest */;
+			productReference = BA4F51022CB996D200DEAF3A /* Done DoneUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
@@ -226,7 +226,7 @@
 					};
 				};
 			};
-			buildConfigurationList = BA4F50E12CB996D100DEAF3A /* Build configuration list for PBXProject "Registrar" */;
+			buildConfigurationList = BA4F50E12CB996D100DEAF3A /* Build configuration list for PBXProject "Done Done" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -244,9 +244,9 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				BA4F50E52CB996D100DEAF3A /* Registrar */,
-				BA4F50F72CB996D200DEAF3A /* RegistrarTests */,
-				BA4F51012CB996D200DEAF3A /* RegistrarUITests */,
+				BA4F50E52CB996D100DEAF3A /* Done Done */,
+				BA4F50F72CB996D200DEAF3A /* Done DoneTests */,
+				BA4F51012CB996D200DEAF3A /* Done DoneUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -302,12 +302,12 @@
 /* Begin PBXTargetDependency section */
 		BA4F50FA2CB996D200DEAF3A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = BA4F50E52CB996D100DEAF3A /* Registrar */;
+			target = BA4F50E52CB996D100DEAF3A /* Done Done */;
 			targetProxy = BA4F50F92CB996D200DEAF3A /* PBXContainerItemProxy */;
 		};
 		BA4F51042CB996D200DEAF3A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = BA4F50E52CB996D100DEAF3A /* Registrar */;
+			target = BA4F50E52CB996D100DEAF3A /* Done Done */;
 			targetProxy = BA4F51032CB996D200DEAF3A /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -439,10 +439,10 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"Registrar/UI/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"DoneDone/UI/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = Registrar/Info.plist;
+				INFOPLIST_FILE = DoneDone/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -453,7 +453,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = ZA.Registrar;
+				PRODUCT_BUNDLE_IDENTIFIER = ZA.DoneDone;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -468,10 +468,10 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"Registrar/UI/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"DoneDone/UI/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = Registrar/Info.plist;
+				INFOPLIST_FILE = DoneDone/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -482,7 +482,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = ZA.Registrar;
+				PRODUCT_BUNDLE_IDENTIFIER = ZA.DoneDone;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -499,12 +499,12 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = ZA.RegistrarTests;
+				PRODUCT_BUNDLE_IDENTIFIER = ZA.DoneDoneTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Registrar.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Registrar";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Done Done.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Done Done";
 			};
 			name = Debug;
 		};
@@ -517,12 +517,12 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = ZA.RegistrarTests;
+				PRODUCT_BUNDLE_IDENTIFIER = ZA.DoneDoneTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Registrar.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Registrar";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Done Done.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Done Done";
 			};
 			name = Release;
 		};
@@ -533,12 +533,12 @@
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = ZA.RegistrarUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = ZA.DoneDoneUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = Registrar;
+				TEST_TARGET_NAME = DoneDone;
 			};
 			name = Debug;
 		};
@@ -549,19 +549,19 @@
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = ZA.RegistrarUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = ZA.DoneDoneUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = Registrar;
+				TEST_TARGET_NAME = DoneDone;
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		BA4F50E12CB996D100DEAF3A /* Build configuration list for PBXProject "Registrar" */ = {
+		BA4F50E12CB996D100DEAF3A /* Build configuration list for PBXProject "Done Done" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				BA4F510A2CB996D200DEAF3A /* Debug */,
@@ -570,7 +570,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		BA4F510C2CB996D200DEAF3A /* Build configuration list for PBXNativeTarget "Registrar" */ = {
+		BA4F510C2CB996D200DEAF3A /* Build configuration list for PBXNativeTarget "Done Done" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				BA4F510D2CB996D200DEAF3A /* Debug */,
@@ -579,7 +579,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		BA4F510F2CB996D200DEAF3A /* Build configuration list for PBXNativeTarget "RegistrarTests" */ = {
+		BA4F510F2CB996D200DEAF3A /* Build configuration list for PBXNativeTarget "Done DoneTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				BA4F51102CB996D200DEAF3A /* Debug */,
@@ -588,7 +588,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		BA4F51122CB996D200DEAF3A /* Build configuration list for PBXNativeTarget "RegistrarUITests" */ = {
+		BA4F51122CB996D200DEAF3A /* Build configuration list for PBXNativeTarget "Done DoneUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				BA4F51132CB996D200DEAF3A /* Debug */,
