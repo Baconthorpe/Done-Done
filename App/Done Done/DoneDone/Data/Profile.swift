@@ -12,9 +12,11 @@ struct Profile: Codable, Identifiable, Hashable {
     var id: String { userID }
     let userID: String
     let name: String
-    let memberGroups: [String]
-    let organizerGroups: [String]
-    let attendingEvents: [String]
+    let tagline: String
+    let icon: String
+    let userTeam: String
+    let memberTeams: [String]
+    let leaderTeams: [String]
 
     struct DatabaseKey {
         private init() {}
@@ -22,22 +24,26 @@ struct Profile: Codable, Identifiable, Hashable {
         static let id = "id"
         static let userID = "userID"
         static let name = "name"
-        static let memberGroups = "memberGroups"
-        static let organizerGroups = "organizerGroups"
-        static let attendingEvents = "attendingEvents"
+        static let tagline = "tagline"
+        static let icon = "icon"
+        static let userTeam = "userTeam"
+        static let memberTeams = "memberTeams"
+        static let leaderTeams = "leaderTeams"
     }
 
     struct Draft {
         let name: String
-        let memberGroups: [String] = []
-        let organizerGroups: [String] = []
-        let attendingEvents: [String] = []
+        let tagline: String
+        let icon: String
+        let memberTeams: [String] = []
+        let leaderTeams: [String] = []
 
         func asDictionary() -> [String: Any] {
             [DatabaseKey.name: name,
-             DatabaseKey.memberGroups: memberGroups,
-             DatabaseKey.organizerGroups: organizerGroups,
-             DatabaseKey.attendingEvents: attendingEvents]
+             DatabaseKey.tagline: tagline,
+             DatabaseKey.icon: icon,
+             DatabaseKey.memberTeams: memberTeams,
+             DatabaseKey.leaderTeams: leaderTeams]
         }
     }
 
@@ -45,9 +51,11 @@ struct Profile: Codable, Identifiable, Hashable {
         Self(
             userID: dictionary[DatabaseKey.userID] as? String ?? "",
             name: dictionary[DatabaseKey.name] as? String ?? "",
-            memberGroups: dictionary[DatabaseKey.memberGroups] as? [String] ?? [],
-            organizerGroups: dictionary[DatabaseKey.organizerGroups] as? [String] ?? [],
-            attendingEvents: dictionary[DatabaseKey.attendingEvents] as? [String] ?? []
+            tagline: dictionary[DatabaseKey.tagline] as? String ?? "",
+            icon: dictionary[DatabaseKey.icon] as? String ?? "",
+            userTeam: dictionary[DatabaseKey.userTeam] as? String ?? "",
+            memberTeams: dictionary[DatabaseKey.memberTeams] as? [String] ?? [],
+            leaderTeams: dictionary[DatabaseKey.leaderTeams] as? [String] ?? []
         )
     }
 }

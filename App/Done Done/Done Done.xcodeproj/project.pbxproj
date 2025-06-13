@@ -23,14 +23,14 @@
 			containerPortal = BA4F50DE2CB996D100DEAF3A /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = BA4F50E52CB996D100DEAF3A;
-			remoteInfo = Registrar;
+			remoteInfo = DoneDone;
 		};
 		BA4F51032CB996D200DEAF3A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = BA4F50DE2CB996D100DEAF3A /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = BA4F50E52CB996D100DEAF3A;
-			remoteInfo = Registrar;
+			remoteInfo = DoneDone;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -153,7 +153,7 @@
 				BA4F51252CB99A4A00DEAF3A /* FirebaseRemoteConfig */,
 				BA5A72542D2CA04D001E19F2 /* GoogleSignIn */,
 			);
-			productName = Registrar;
+			productName = DoneDone;
 			productReference = BA4F50E62CB996D100DEAF3A /* Done Done.app */;
 			productType = "com.apple.product-type.application";
 		};
@@ -176,7 +176,7 @@
 			name = "Done DoneTests";
 			packageProductDependencies = (
 			);
-			productName = RegistrarTests;
+			productName = DoneDoneTests;
 			productReference = BA4F50F82CB996D200DEAF3A /* Done DoneTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
@@ -199,7 +199,7 @@
 			name = "Done DoneUITests";
 			packageProductDependencies = (
 			);
-			productName = RegistrarUITests;
+			productName = DoneDoneUITests;
 			productReference = BA4F51022CB996D200DEAF3A /* Done DoneUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
