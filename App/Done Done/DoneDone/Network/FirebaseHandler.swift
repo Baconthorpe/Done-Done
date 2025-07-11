@@ -24,10 +24,12 @@ enum FirebaseHandler {
         private init() {}
 
         static let profile = "profiles"
+        static let team = "teams"
+        static let ticket = "tickets"
         static let event = "events"
         static let eventInvitation = "eventInvitations"
         static let group = "groups"
-        static let groupInvitation = "groupInvitations"
+        static let teamInvitation = "teamInvitations"
     }
 
     static var firestore: Firestore!

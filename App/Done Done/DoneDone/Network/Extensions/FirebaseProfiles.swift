@@ -42,16 +42,16 @@ extension FirebaseHandler {
         Future { promise in
             guard let currentUserID = currentUser?.uid else { promise(Result.failure(Failure.signInNeeded)); return }
 
-            var formattedDraft = draft.asDictionary()
-            formattedDraft[Profile.DatabaseKey.userID] = currentUserID
+            var formattedProfileDraft = draft.asDictionary()
+            formattedProfileDraft[Profile.DatabaseKey.userID] = currentUserID
+            var formattedTeamDraft = Team.Draft(name: draft.name, description: "user team").asDictionary()
 
-            firestore.collection(DatabaseKey.profile).document(currentUserID).setData(formattedDraft) { error in
-                if let error = error {
-                    promise(Result.failure(Failure.firebase(error)))
-                    return
-                }
 
-                let newProfile = Profile(
+            firestore.runTransaction { transaction, errorPointer in
+                transaction.setData(formattedProfileDraft, forDocument: firestore.collection(DatabaseKey.profile).document(currentUserID))
+                transaction.setData(formattedTeamDraft, forDocument: firestore.collection(DatabaseKey.team).document(currentUserID))
+
+                return Profile(
                     userID: currentUserID,
                     name: draft.name,
                     tagline: draft.tagline,
@@ -60,8 +60,17 @@ extension FirebaseHandler {
                     memberTeams: draft.memberTeams,
                     leaderTeams: draft.leaderTeams
                 )
+            } completion: { profile, error in
+                if let error = error {
+                    promise(.failure(Failure.firebase(error)))
+                    return
+                }
+                guard let profile = profile as? Profile else {
+                    promise(.failure(Failure.unknown))
+                    return
+                }
 
-                promise(Result.success(newProfile))
+                promise(.success(profile))
             }
         }
     }

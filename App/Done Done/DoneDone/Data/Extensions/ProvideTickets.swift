@@ -16,7 +16,7 @@ extension Provide {
     }
 
     static func getTicketsForMyTeams() -> AnyPublisher<[Event], Error> {
-        Just(Local.profile?.memberGroups)
+        Just(Local.profile?.memberTeams)
             .map { $0 ?? [] }
             .flatMap(FirebaseHandler.getGroups)
             .map { $0.flatMap(\.events) }
