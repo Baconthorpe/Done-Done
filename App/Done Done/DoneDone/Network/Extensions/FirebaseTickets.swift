@@ -45,40 +45,40 @@ extension FirebaseHandler {
         }
     }
 
-    static func getMyTickets() -> Future<[Event], Error> {
+    static func getMyTickets() -> Future<[Ticket], Error> {
         Future { promise in
             guard let currentUserID = currentUser?.uid else { promise(Result.failure(Failure.signInNeeded)); return }
 
             firestore
-                .collection(DatabaseKey.event)
+                .collection(DatabaseKey.ticket)
                 .whereField(Event.DatabaseKey.creator, isEqualTo: currentUserID)
                 .getDocuments { querySnapshot, err in
                     guard let querySnapshot = querySnapshot else {
                         promise(Result.failure(Failure.unknown))
                         return
                     }
-                    let events: [Event] = querySnapshot.documents.compactMap { document in
-                        try? document.data(as: Event.self)
+                    let tickets: [Ticket] = querySnapshot.documents.compactMap { document in
+                        try? document.data(as: Ticket.self)
                     }
-                    promise(Result.success(events))
+                    promise(Result.success(tickets))
                 }
         }
     }
 
-    static func getTickets(eventIDs: [String]) -> Future<[Event], Error> {
+    static func getTickets(eventIDs: [String]) -> Future<[Ticket], Error> {
         Future { promise in
             firestore
-                .collection(DatabaseKey.event)
+                .collection(DatabaseKey.ticket)
                 .whereField(FieldPath.documentID(), in: eventIDs)
                 .getDocuments { querySnapshot, err in
                     guard let querySnapshot = querySnapshot else {
                         promise(Result.failure(Failure.unknown))
                         return
                     }
-                    let events: [Event] = querySnapshot.documents.compactMap { document in
-                        try? document.data(as: Event.self)
+                    let tickets: [Ticket] = querySnapshot.documents.compactMap { document in
+                        try? document.data(as: Ticket.self)
                     }
-                    promise(Result.success(events))
+                    promise(Result.success(tickets))
                 }
         }
     }

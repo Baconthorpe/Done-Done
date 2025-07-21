@@ -89,6 +89,26 @@ extension FirebaseHandler {
         }
     }
 
+    static func getMyTeamInvitations() -> Future<[TeamInvitation], Error> {
+            Future { promise in
+                guard let currentUserID = currentUser?.uid else { promise(Result.failure(Failure.signInNeeded)); return }
+    
+                firestore
+                    .collection(DatabaseKey.teamInvitation)
+                    .whereField(GroupInvitation.DatabaseKey.recipient, isEqualTo: currentUserID)
+                    .getDocuments { querySnapshot, err in
+                        guard let querySnapshot = querySnapshot else {
+                            promise(Result.failure(Failure.unknown))
+                            return
+                        }
+                        let teamInvitations: [TeamInvitation] = querySnapshot.documents.compactMap { document in
+                            try? document.data(as: TeamInvitation.self)
+                        }
+                        promise(Result.success(teamInvitations))
+                    }
+            }
+        }
+
     static func acceptTeamInvitation(_ invitation: TeamInvitation) -> Future<Void, Error> {
         Future { promise in
             guard let currentUserID = currentUser?.uid else { promise(Result.failure(Failure.signInNeeded)); return }
@@ -162,6 +182,29 @@ extension FirebaseHandler {
 
                 promise(.success(()))
             }
+        }
+    }
+
+    static func getTeams(teamIDs: [String]) -> Future<[Team], Error> {
+        Future { promise in
+            guard !teamIDs.isEmpty else {
+                promise(Result.success([]))
+                return
+            }
+
+            firestore
+                .collection(DatabaseKey.team)
+                .whereField(FieldPath.documentID(), in: teamIDs)
+                .getDocuments { querySnapshot, err in
+                    guard let querySnapshot = querySnapshot else {
+                        promise(Result.failure(Failure.unknown))
+                        return
+                    }
+                    let teams: [Team] = querySnapshot.documents.compactMap { document in
+                        try? document.data(as: Team.self)
+                    }
+                    promise(Result.success(teams))
+                }
         }
     }
 

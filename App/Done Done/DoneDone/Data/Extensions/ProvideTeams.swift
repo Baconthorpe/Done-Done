@@ -37,11 +37,10 @@ extension Provide {
             .eraseToAnyPublisher()
     }
 
-//    static func getMyTeamInvitations() -> AnyPublisher<[TeamInvitation.WithGroup], Error> {
-//        FirebaseHandler.getMyGroupInvitations()
-//            .flatMap(addTeamInfoToTeamInvitations)
-//            .eraseToAnyPublisher()
-//    }
+    static func getMyTeamInvitations() -> AnyPublisher<[TeamInvitation], Error> {
+        FirebaseHandler.getMyTeamInvitations()
+            .eraseToAnyPublisher()
+    }
 
     static func acceptTeamInvitation(_ invitation: TeamInvitation) -> AnyPublisher<Void, Error> {
         FirebaseHandler.acceptTeamInvitation(invitation)

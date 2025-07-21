@@ -10,23 +10,41 @@ import Combine
 
 // MARK: - Ticket Methods
 extension Provide {
-    static func getMyTickets() -> AnyPublisher<[Event], Error> {
-        FirebaseHandler.getMyEvents()
+    static func getMyTickets() -> AnyPublisher<[Ticket], Error> {
+        FirebaseHandler.getMyTickets()
             .eraseToAnyPublisher()
     }
 
-    static func getTicketsForMyTeams() -> AnyPublisher<[Event], Error> {
+    static func getTicketsForMyTeams() -> AnyPublisher<[Ticket], Error> {
         Just(Local.profile?.memberTeams)
             .map { $0 ?? [] }
-            .flatMap(FirebaseHandler.getGroups)
-            .map { $0.flatMap(\.events) }
-            .flatMap(FirebaseHandler.getEvents)
+            .flatMap(FirebaseHandler.getTeams)
+            .map { $0.flatMap(\.tickets) }
+            .flatMap(FirebaseHandler.getTickets)
             .eraseToAnyPublisher()
     }
 
-    static func createTicket(title: String, description: String) -> AnyPublisher<Event, Error> {
-        FirebaseHandler.createEvent(Event.Draft(title: title, description: description))
-            .eraseToAnyPublisher()
+    static func createTicket(
+        team: String,
+        title: String,
+        description: String,
+        priority: Ticket.Priority? = nil,
+        deadline: Date? = nil,
+        dependencies: [String]? = nil,
+        size: Ticket.Size? = nil,
+        tags: [String]? = nil
+    ) -> AnyPublisher<Ticket, Error> {
+        FirebaseHandler.createTicket(Ticket.Draft(
+            team: team,
+            title: title,
+            description: description,
+            priority: priority,
+            deadline: deadline,
+            dependencies: dependencies,
+            size: size,
+            tags: tags)
+        )
+        .eraseToAnyPublisher()
     }
 
 //    static func getProfilesOfAttending(userIDs: [String]) -> AnyPublisher<[Profile], Error> {

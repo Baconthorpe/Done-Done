@@ -1,17 +1,17 @@
 //
-//  GroupView.swift
+//  TeamView.swift
 //  Done Done
 //
-//  Created by Ezekiel Abuhoff on 4/21/25.
+//  Created by Ezekiel Abuhoff on 7/17/25.
 //
 
 import SwiftUI
 import Combine
 
-struct GroupView: View {
+struct TeamView: View {
     @EnvironmentObject var flow: Flow
 
-    let group: Group
+    let team: Team
 
     @State var organizers: [Profile] = []
     @State var members: [Profile] = []
@@ -20,33 +20,33 @@ struct GroupView: View {
 
     var body: some View {
         VStack {
-            Text(group.name)
+            Text(team.name)
 
             Text("Members")
             List {
                 ForEach(members) { member in
                     HStack {
                         Text(member.name)
-                        if group.organizers.contains(member.id) {
+                        if team.leaders.contains(member.id) {
                             Image(systemName: "checkmark")
                         }
                     }
                 }
             }.onAppear(perform: getMembers)
 
-            NavigationLink(value: group) {
+            NavigationLink(value: team) {
                 Text("Invite A New Member")
             }
         }
 
-        .navigationDestination(for: Group.self) { group in
-            InviteToGroupView(group: group)
+        .navigationDestination(for: Team.self) { team in
+            InviteToTeamView(team: team)
         }
     }
 
     func getMembers() {
-        Provide.getGroupMembers(group)
-            .sinkValue($members, logPrefix: "Get Group Members")
+        Provide.getTeamMembers(team)
+            .sinkValue($members, logPrefix: "Get Team Members")
             .store(in: &cancellables)
     }
 }

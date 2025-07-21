@@ -8,10 +8,10 @@
 import SwiftUI
 import Combine
 
-struct InviteToGroupView: View {
+struct InviteToTeamView: View {
     @EnvironmentObject var flow: Flow
 
-    let group: Group
+    let team: Team
 
     @State private var nameSearch: String = ""
     @State private var profiles: [Profile] = []
@@ -53,8 +53,8 @@ struct InviteToGroupView: View {
     }
 
     func sendInvitation() {
-        guard let groupID = group.id, let selectedProfile else { return }
-        Provide.sendGroupInvitation(group: groupID, recipient: selectedProfile.id)
+        guard let teamID = team.id, let selectedProfile else { return }
+        Provide.sendTeamInvitation(team: teamID, teamName: team.name, recipient: selectedProfile.id)
             .sinkCompletion(logPrefix: "Invite To Group") { _ in
                 flow.path.removeLast()
             }.store(in: &cancellables)

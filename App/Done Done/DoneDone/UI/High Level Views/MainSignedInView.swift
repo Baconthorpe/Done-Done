@@ -15,7 +15,7 @@ struct MainSignedInView: View {
 
     var body: some View {
         TabView {
-            Tab("Events", image: "calendar_icon") { EventListView() }
+            Tab("Tickets", image: "calendar_icon") { TicketListView() }
             Tab("Profile", image: "profile_icon") { ProfileView() }
         }
     }

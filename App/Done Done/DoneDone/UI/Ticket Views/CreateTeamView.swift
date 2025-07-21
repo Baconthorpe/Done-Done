@@ -1,17 +1,17 @@
 //
-//  CreateEventView.swift
+//  CreateTeamView.swift
 //  Done Done
 //
-//  Created by Ezekiel Abuhoff on 4/7/25.
+//  Created by Ezekiel Abuhoff on 7/15/25.
 //
 
 import SwiftUI
 import Combine
 
-struct CreateEventView: View {
+struct CreateTeamView: View {
     @EnvironmentObject var flow: Flow
 
-    @State var title: String = ""
+    @State var name: String = ""
     @State var description: String = ""
     @State var invalid: Bool = false
 
@@ -20,33 +20,33 @@ struct CreateEventView: View {
     var body: some View {
         VStack {
             HStack{
-                Text("Title: ")
+                Text("Name: ")
                     .foregroundStyle(invalid ? .red : .primary)
-                TextField("My Party", text: $title)
-                    .onChange(of: title) { invalid = false }
+                TextField("Scooby Gang", text: $name)
+                    .onChange(of: name) { invalid = false }
             }
             HStack{
                 Text("Description: ")
-                TextField("Cry if I want to", text: $description)
+                TextField("Keeping Sunnydale safe", text: $description)
             }
             Button {
-                createEvent()
+                createGroup()
             } label: {
-                Text("Create Event")
+                Text("Create Team")
             }
         }
     }
 
-    func createEvent() {
-        guard !title.isEmpty else {
+    func createGroup() {
+        guard !name.isEmpty else {
             invalid = true
             return
         }
 
-        Provide.createEvent(
-            title: title,
+        Provide.createTeam(
+            name: name,
             description: description
-        ).sinkCompletion(logPrefix: "Create Event") { _ in
+        ).sinkCompletion(logPrefix: "Create Team") { _ in
             flow.path.removeLast()
         }.store(in: &cancellables)
     }

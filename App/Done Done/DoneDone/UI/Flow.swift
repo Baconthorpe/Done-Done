@@ -15,9 +15,8 @@ class Flow: ObservableObject {
     }
 
     enum Go {
-        case creatingEvent
-        case creatingGroup
-        case invitingToEvent
+        case creatingTicket
+        case creatingTeam
     }
 
     @Published var path = NavigationPath()
