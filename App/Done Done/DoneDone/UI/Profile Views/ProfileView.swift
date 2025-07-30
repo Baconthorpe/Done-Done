@@ -12,7 +12,7 @@ struct ProfileView: View {
     @EnvironmentObject var flow: Flow
 
     @State var profile: Profile? = { Local.profile }()
-    @State var groups: [Group] = []
+    @State var teams: [Team] = []
     @State var teamInvitations = [TeamInvitation]()
 
     @State var cancellables = Set<AnyCancellable>()
@@ -22,11 +22,11 @@ struct ProfileView: View {
 
             Text(profile?.name ?? "PROFILE")
 
-            Text("Groups")
+            Text("Teams")
             List {
-                ForEach(groups) { group in
-                    NavigationLink(value: group) {
-                        Text(group.name)
+                ForEach(teams) { team in
+                    NavigationLink(value: team) {
+                        Text(team.name)
                     }
                 }.onAppear(perform: getTeams)
 
@@ -52,7 +52,7 @@ struct ProfileView: View {
 
     func getTeams() {
         Provide.getMyTeams()
-            .sinkValue($groups, logPrefix: "Get Teams")
+            .sinkValue($teams, logPrefix: "Get Teams")
             .store(in: &cancellables)
     }
 

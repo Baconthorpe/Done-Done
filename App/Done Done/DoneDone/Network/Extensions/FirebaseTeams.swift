@@ -95,7 +95,7 @@ extension FirebaseHandler {
     
                 firestore
                     .collection(DatabaseKey.teamInvitation)
-                    .whereField(GroupInvitation.DatabaseKey.recipient, isEqualTo: currentUserID)
+                    .whereField(TeamInvitation.DatabaseKey.recipient, isEqualTo: currentUserID)
                     .getDocuments { querySnapshot, err in
                         guard let querySnapshot = querySnapshot else {
                             promise(Result.failure(Failure.unknown))
@@ -121,7 +121,7 @@ extension FirebaseHandler {
 
             firestore.runTransaction { transaction, errorPointer in
                 transaction.updateData(
-                    [Group.DatabaseKey.members: FieldValue.arrayUnion([currentUserID])],
+                    [Team.DatabaseKey.members: FieldValue.arrayUnion([currentUserID])],
                     forDocument: teamRef
                 )
                 transaction.updateData(
@@ -165,7 +165,7 @@ extension FirebaseHandler {
 
             firestore.runTransaction { transaction, errorPointer in
                 transaction.updateData(
-                    [Group.DatabaseKey.members: FieldValue.arrayRemove([currentUserID])],
+                    [Team.DatabaseKey.members: FieldValue.arrayRemove([currentUserID])],
                     forDocument: groupRef
                 )
                 transaction.updateData(

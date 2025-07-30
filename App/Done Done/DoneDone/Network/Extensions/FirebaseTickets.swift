@@ -51,7 +51,7 @@ extension FirebaseHandler {
 
             firestore
                 .collection(DatabaseKey.ticket)
-                .whereField(Event.DatabaseKey.creator, isEqualTo: currentUserID)
+                .whereField(Ticket.DatabaseKey.creator, isEqualTo: currentUserID)
                 .getDocuments { querySnapshot, err in
                     guard let querySnapshot = querySnapshot else {
                         promise(Result.failure(Failure.unknown))

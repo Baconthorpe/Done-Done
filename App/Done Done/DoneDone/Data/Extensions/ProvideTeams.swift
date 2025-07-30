@@ -62,10 +62,10 @@ extension Provide {
             .eraseToAnyPublisher()
     }
 
-    static func getMyTeams() -> AnyPublisher<[Group], Error> {
+    static func getMyTeams() -> AnyPublisher<[Team], Error> {
         Just(Local.profile?.memberTeams)
             .map { $0 ?? [] }
-            .flatMap(FirebaseHandler.getGroups)
+            .flatMap(FirebaseHandler.getTeams)
             .eraseToAnyPublisher()
     }
 
